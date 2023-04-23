@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "266417412390",
+    "project_id": "senadedieu-fd55b",
+    "storage_bucket": "senadedieu-fd55b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:266417412390:android:426e39b3f338364a82c9e7",
+        "android_client_info": {
+          "package_name": "sena.dedieu.senadedie"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "266417412390-hdeaptki270v1nr3qqugdernr8sesf7d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCvz8ME24wBNh8x_uPZmWv35N4PUnToYYk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "266417412390-hdeaptki270v1nr3qqugdernr8sesf7d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
