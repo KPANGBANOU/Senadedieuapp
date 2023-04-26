@@ -17,6 +17,7 @@ class VenteACredits {
   final int montant;
   final double benefice;
   final String credit_uid;
+  final String numero;
   VenteACredits({
     required this.uid,
     required this.created_at,
@@ -29,12 +30,14 @@ class VenteACredits {
     required this.montant,
     required this.benefice,
     required this.credit_uid,
+    required this.numero,
   });
 
   factory VenteACredits.FromFirestore(DocumentSnapshot document) {
     Timestamp created = (document.data() as Map)['created_at'];
     Timestamp updated = (document.data() as Map)['updated_at'];
     return VenteACredits(
+        numero: (document.data() as Map)['numero'],
         uid: document.id,
         created_at: DateFormat("dd-MM-yyyy").format(created.toDate()) +
             " à " +
@@ -64,6 +67,7 @@ class VenteACredits {
     int? montant,
     double? benefice,
     String? credit_uid,
+    String? numero,
   }) {
     return VenteACredits(
       uid: uid ?? this.uid,
@@ -77,6 +81,7 @@ class VenteACredits {
       montant: montant ?? this.montant,
       benefice: benefice ?? this.benefice,
       credit_uid: credit_uid ?? this.credit_uid,
+      numero: numero ?? this.numero,
     );
   }
 
@@ -94,6 +99,7 @@ class VenteACredits {
     result.addAll({'montant': montant});
     result.addAll({'benefice': benefice});
     result.addAll({'credit_uid': credit_uid});
+    result.addAll({'numero': numero});
 
     return result;
   }
@@ -111,6 +117,7 @@ class VenteACredits {
       montant: map['montant']?.toInt() ?? 0,
       benefice: map['benefice']?.toDouble() ?? 0.0,
       credit_uid: map['credit_uid'] ?? '',
+      numero: map['numero'] ?? '',
     );
   }
 
@@ -121,7 +128,7 @@ class VenteACredits {
 
   @override
   String toString() {
-    return 'VenteACredits(uid: $uid, created_at: $created_at, updated_at: $updated_at, paye: $paye, client_uid: $client_uid, user_uid: $user_uid, client_numero: $client_numero, client_nom: $client_nom, montant: $montant, benefice: $benefice, credit_uid: $credit_uid)';
+    return 'VenteACredits(uid: $uid, created_at: $created_at, updated_at: $updated_at, paye: $paye, client_uid: $client_uid, user_uid: $user_uid, client_numero: $client_numero, client_nom: $client_nom, montant: $montant, benefice: $benefice, credit_uid: $credit_uid, numero: $numero)';
   }
 
   @override
@@ -139,7 +146,8 @@ class VenteACredits {
         other.client_nom == client_nom &&
         other.montant == montant &&
         other.benefice == benefice &&
-        other.credit_uid == credit_uid;
+        other.credit_uid == credit_uid &&
+        other.numero == numero;
   }
 
   @override
@@ -154,6 +162,7 @@ class VenteACredits {
         client_nom.hashCode ^
         montant.hashCode ^
         benefice.hashCode ^
-        credit_uid.hashCode;
+        credit_uid.hashCode ^
+        numero.hashCode;
   }
 }

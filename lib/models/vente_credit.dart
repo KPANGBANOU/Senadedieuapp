@@ -17,6 +17,7 @@ class VenteCredits {
   final String created_at_mois;
   final String created_at_annee;
   final int during;
+  final String numero;
   VenteCredits({
     required this.uid,
     required this.user_uid,
@@ -29,12 +30,14 @@ class VenteCredits {
     required this.created_at_mois,
     required this.created_at_annee,
     required this.during,
+    required this.numero,
   });
 
   factory VenteCredits.FromFirestore(DocumentSnapshot document) {
     Timestamp created = (document.data() as Map)['created_at'];
 
     return VenteCredits(
+        numero: (document.data() as Map)['numero'],
         uid: document.id,
         user_uid: (document.data() as Map)['user_uid'],
         credit_uid: (document.data() as Map)['credit_uid'],
@@ -60,6 +63,7 @@ class VenteCredits {
     String? created_at_mois,
     String? created_at_annee,
     int? during,
+    String? numero,
   }) {
     return VenteCredits(
       uid: uid ?? this.uid,
@@ -73,6 +77,7 @@ class VenteCredits {
       created_at_mois: created_at_mois ?? this.created_at_mois,
       created_at_annee: created_at_annee ?? this.created_at_annee,
       during: during ?? this.during,
+      numero: numero ?? this.numero,
     );
   }
 
@@ -90,6 +95,7 @@ class VenteCredits {
     result.addAll({'created_at_mois': created_at_mois});
     result.addAll({'created_at_annee': created_at_annee});
     result.addAll({'during': during});
+    result.addAll({'numero': numero});
 
     return result;
   }
@@ -107,6 +113,7 @@ class VenteCredits {
       created_at_mois: map['created_at_mois'] ?? '',
       created_at_annee: map['created_at_annee'] ?? '',
       during: map['during']?.toInt() ?? 0,
+      numero: map['numero'] ?? '',
     );
   }
 
@@ -117,7 +124,7 @@ class VenteCredits {
 
   @override
   String toString() {
-    return 'VenteCredits(uid: $uid, user_uid: $user_uid, credit_uid: $credit_uid, client_uid: $client_uid, montant: $montant, benefice: $benefice, created_at: $created_at, created_at_heure: $created_at_heure, created_at_mois: $created_at_mois, created_at_annee: $created_at_annee, during: $during)';
+    return 'VenteCredits(uid: $uid, user_uid: $user_uid, credit_uid: $credit_uid, client_uid: $client_uid, montant: $montant, benefice: $benefice, created_at: $created_at, created_at_heure: $created_at_heure, created_at_mois: $created_at_mois, created_at_annee: $created_at_annee, during: $during, numero: $numero)';
   }
 
   @override
@@ -135,7 +142,8 @@ class VenteCredits {
         other.created_at_heure == created_at_heure &&
         other.created_at_mois == created_at_mois &&
         other.created_at_annee == created_at_annee &&
-        other.during == during;
+        other.during == during &&
+        other.numero == numero;
   }
 
   @override
@@ -150,6 +158,7 @@ class VenteCredits {
         created_at_heure.hashCode ^
         created_at_mois.hashCode ^
         created_at_annee.hashCode ^
-        during.hashCode;
+        during.hashCode ^
+        numero.hashCode;
   }
 }
