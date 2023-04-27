@@ -34,7 +34,7 @@ dependencies:
   twilio_flutter: ^0.0.9
   connectivity_plus: ^3.0.2
   intl: ^0.18.0
-  
+  sms_maintained: ^3.0.1
 
 
   http: ^0.13.5

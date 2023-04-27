@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
@@ -17,6 +18,7 @@ class Credits {
   final double benefice;
   final int benefice_sur_5000;
   final double benefice_cumule;
+  final bool approvisionne;
   Credits({
     required this.uid,
     required this.user_uid,
@@ -30,11 +32,13 @@ class Credits {
     required this.benefice,
     required this.benefice_sur_5000,
     required this.benefice_cumule,
+    required this.approvisionne,
   });
 
   factory Credits.FromFirestore(DocumentSnapshot document) {
     Timestamp created = (document.data() as Map)['created_at'];
     return Credits(
+        approvisionne: (document.data() as Map)['approvisionne'],
         uid: document.id,
         user_uid: (document.data() as Map<String, dynamic>)['user_uid'],
         nom: (document.data() as Map)['nom'],
@@ -64,6 +68,7 @@ class Credits {
     double? benefice,
     int? benefice_sur_5000,
     double? benefice_cumule,
+    bool? approvisionne,
   }) {
     return Credits(
       uid: uid ?? this.uid,
@@ -80,6 +85,7 @@ class Credits {
       benefice: benefice ?? this.benefice,
       benefice_sur_5000: benefice_sur_5000 ?? this.benefice_sur_5000,
       benefice_cumule: benefice_cumule ?? this.benefice_cumule,
+      approvisionne: approvisionne ?? this.approvisionne,
     );
   }
 
@@ -98,6 +104,7 @@ class Credits {
     result.addAll({'benefice': benefice});
     result.addAll({'benefice_sur_5000': benefice_sur_5000});
     result.addAll({'benefice_cumule': benefice_cumule});
+    result.addAll({'approvisionne': approvisionne});
 
     return result;
   }
@@ -116,6 +123,7 @@ class Credits {
       benefice: map['benefice']?.toDouble() ?? 0.0,
       benefice_sur_5000: map['benefice_sur_5000']?.toInt() ?? 0,
       benefice_cumule: map['benefice_cumule']?.toDouble() ?? 0.0,
+      approvisionne: map['approvisionne'] ?? false,
     );
   }
 
@@ -126,7 +134,7 @@ class Credits {
 
   @override
   String toString() {
-    return 'Credits(uid: $uid, user_uid: $user_uid, nom: $nom, created_at: $created_at, created_at_heure: $created_at_heure, montant_initial: $montant_initial, montant_initial_cumule: $montant_initial_cumule, montant_disponible: $montant_disponible, seuil_approvisionnement: $seuil_approvisionnement, benefice: $benefice, benefice_sur_5000: $benefice_sur_5000, benefice_cumule: $benefice_cumule)';
+    return 'Credits(uid: $uid, user_uid: $user_uid, nom: $nom, created_at: $created_at, created_at_heure: $created_at_heure, montant_initial: $montant_initial, montant_initial_cumule: $montant_initial_cumule, montant_disponible: $montant_disponible, seuil_approvisionnement: $seuil_approvisionnement, benefice: $benefice, benefice_sur_5000: $benefice_sur_5000, benefice_cumule: $benefice_cumule, approvisionne: $approvisionne)';
   }
 
   @override
@@ -145,7 +153,8 @@ class Credits {
         other.seuil_approvisionnement == seuil_approvisionnement &&
         other.benefice == benefice &&
         other.benefice_sur_5000 == benefice_sur_5000 &&
-        other.benefice_cumule == benefice_cumule;
+        other.benefice_cumule == benefice_cumule &&
+        other.approvisionne == approvisionne;
   }
 
   @override
@@ -161,6 +170,7 @@ class Credits {
         seuil_approvisionnement.hashCode ^
         benefice.hashCode ^
         benefice_sur_5000.hashCode ^
-        benefice_cumule.hashCode;
+        benefice_cumule.hashCode ^
+        approvisionne.hashCode;
   }
 }

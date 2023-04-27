@@ -1,7 +1,6 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
@@ -18,6 +17,7 @@ class Depots {
   final String updated_at_heure;
   final bool paye;
   final String credit_nom;
+  final String numero_depot;
   Depots({
     required this.uid,
     required this.user_uid,
@@ -31,12 +31,14 @@ class Depots {
     required this.updated_at_heure,
     required this.paye,
     required this.credit_nom,
+    required this.numero_depot,
   });
 
   factory Depots.FromFirestore(DocumentSnapshot document) {
     Timestamp created = (document.data() as Map)['created_at'];
     Timestamp updated = (document.data() as Map)['updated_at'];
     return Depots(
+        numero_depot: (document.data() as Map)['numero_depot'],
         credit_nom: (document.data() as Map)['credit_non'],
         uid: document.id,
         user_uid: (document.data() as Map)['user_uid'],
@@ -64,6 +66,7 @@ class Depots {
     String? updated_at_heure,
     bool? paye,
     String? credit_nom,
+    String? numero_depot,
   }) {
     return Depots(
       uid: uid ?? this.uid,
@@ -78,6 +81,7 @@ class Depots {
       updated_at_heure: updated_at_heure ?? this.updated_at_heure,
       paye: paye ?? this.paye,
       credit_nom: credit_nom ?? this.credit_nom,
+      numero_depot: numero_depot ?? this.numero_depot,
     );
   }
 
@@ -96,6 +100,7 @@ class Depots {
     result.addAll({'updated_at_heure': updated_at_heure});
     result.addAll({'paye': paye});
     result.addAll({'credit_nom': credit_nom});
+    result.addAll({'numero_depot': numero_depot});
 
     return result;
   }
@@ -114,6 +119,7 @@ class Depots {
       updated_at_heure: map['updated_at_heure'] ?? '',
       paye: map['paye'] ?? false,
       credit_nom: map['credit_nom'] ?? '',
+      numero_depot: map['numero_depot'] ?? '',
     );
   }
 
@@ -123,7 +129,7 @@ class Depots {
 
   @override
   String toString() {
-    return 'Depots(uid: $uid, user_uid: $user_uid, client_uid: $client_uid, credit_uid: $credit_uid, montant: $montant, benefice: $benefice, created_at: $created_at, created_at_heure: $created_at_heure, updated_at: $updated_at, updated_at_heure: $updated_at_heure, paye: $paye, credit_nom: $credit_nom)';
+    return 'Depots(uid: $uid, user_uid: $user_uid, client_uid: $client_uid, credit_uid: $credit_uid, montant: $montant, benefice: $benefice, created_at: $created_at, created_at_heure: $created_at_heure, updated_at: $updated_at, updated_at_heure: $updated_at_heure, paye: $paye, credit_nom: $credit_nom, numero_depot: $numero_depot)';
   }
 
   @override
@@ -142,7 +148,8 @@ class Depots {
         other.updated_at == updated_at &&
         other.updated_at_heure == updated_at_heure &&
         other.paye == paye &&
-        other.credit_nom == credit_nom;
+        other.credit_nom == credit_nom &&
+        other.numero_depot == numero_depot;
   }
 
   @override
@@ -158,6 +165,7 @@ class Depots {
         updated_at.hashCode ^
         updated_at_heure.hashCode ^
         paye.hashCode ^
-        credit_nom.hashCode;
+        credit_nom.hashCode ^
+        numero_depot.hashCode;
   }
 }

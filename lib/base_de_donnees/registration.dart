@@ -1,12 +1,10 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, unused_element, body_might_complete_normally_nullable, unused_import, await_only_futures, unused_local_variable, non_constant_identifier_names
 
 import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:firebase_core/firebase_core.dart';
-
-import 'user.dart';
+import '../models/user.dart';
 
 // ignore: camel_case_types
 class firebaseAuth {

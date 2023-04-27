@@ -11,6 +11,8 @@ import 'package:senadedieu/provider/provider_ajouter_credit.dart';
 import 'package:senadedieu/provider/provider_ajouter_depense.dart';
 import 'package:senadedieu/provider/provider_ajouter_perte.dart';
 import 'package:senadedieu/provider/provider_ajouter_tranche.dart';
+import 'package:senadedieu/provider/provider_gestion_depot.dart';
+import 'package:senadedieu/provider/provider_gestion_retrait.dart';
 import 'package:senadedieu/provider/provider_recharger_credit.dart';
 import 'package:senadedieu/provider/provider_vente_credit.dart';
 
@@ -75,6 +77,12 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => ProviderVenteCredit(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ProviderGestionDepot(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ProviderGestionRetrait(),
         ),
       ],
       child: MaterialApp(
