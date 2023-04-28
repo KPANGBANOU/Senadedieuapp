@@ -7,6 +7,25 @@ class Loader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          CircularProgressIndicator(
+            color: Colors.lightBlue.shade900,
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Image.asset(
+            "images/logo.png",
+            scale: 4.5,
+            fit: BoxFit.cover,
+            height: 250,
+            width: 250,
+          ),
+        ],
+      ),
+    );
   }
 }

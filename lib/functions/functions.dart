@@ -1,17 +1,42 @@
 // ignore_for_file: prefer_interpolation_to_compose_strings, unused_local_variable, unnecessary_null_comparison
 
 import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server/gmail.dart';
 import 'package:senadedieu/base_de_donnees/registration.dart';
-
 import 'generate_code.dart';
 
 class Functions {
+  Future<String> login(
+      String email, String password, firebaseAuth firebaseService) async {
+    try {
+      if (email.isEmpty || !email.contains("@") || password.length < 8) {
+        return "100";
+      } else {
+        final request = await firebaseService.signInWithEmailAndPassword(
+            email, password.trim());
+
+        if (request != null) {
+          await FirebaseFirestore.instance
+              .collection("users")
+              .doc(FirebaseAuth.instance.currentUser!.uid)
+              .update({
+            "login": true,
+            "mdp": sha1.convert(utf8.encode(password.trim())).toString()
+          });
+          return "200";
+        } else {
+          return "202";
+        }
+      }
+    } catch (e) {
+      return "202";
+    }
+  }
+
   // credits
 
 // ignore_for_file: non_constant_identifier_names
@@ -1014,7 +1039,7 @@ class Functions {
 
           final sendReport = await send(message, smtpServer);
 
-          return "200";
+          return code.toString();
         }
       }
     } catch (e) {
@@ -1037,8 +1062,8 @@ class Functions {
       if (code_envoye.toString() != code_saiie) {
         return "100";
       } else {
-        final result =
-            firebaseService.createUserWithEmailAndPassword(email, password);
+        final result = await firebaseService.createUserWithEmailAndPassword(
+            email, password);
 
         if (result != null) {
           await FirebaseFirestore.instance

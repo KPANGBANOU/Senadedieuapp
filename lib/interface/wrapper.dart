@@ -13,7 +13,7 @@ class Wrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<Utilisateur>(context);
+    final user = Provider.of<Utilisateur?>(context);
     final user_data = Provider.of<donnesUtilisateur>(context);
 
     if (user == null) {

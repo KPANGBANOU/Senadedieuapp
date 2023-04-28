@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:senadedieu/base_de_donnees/registration.dart';
@@ -17,11 +18,14 @@ import 'package:senadedieu/provider/provider_created_account.dart';
 import 'package:senadedieu/provider/provider_gestion_depot.dart';
 import 'package:senadedieu/provider/provider_gestion_retrait.dart';
 import 'package:senadedieu/provider/provider_recharger_credit.dart';
+import 'package:senadedieu/provider/provider_reset_password.dart';
 import 'package:senadedieu/provider/provider_vente_credit.dart';
 
 import 'interface/splash.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -93,6 +97,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => ProviderConnexion(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ProviderResetPassword(),
         ),
       ],
       child: MaterialApp(
