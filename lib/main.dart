@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:senadedieu/base_de_donnees/registration.dart';
 import 'package:senadedieu/base_de_donnees/service_base_de_donnees.dart';
+import 'package:senadedieu/functions/functions.dart';
 import 'package:senadedieu/models/budget.dart';
 import 'package:senadedieu/models/tranches.dart';
 import 'package:senadedieu/models/user.dart';
@@ -11,6 +12,8 @@ import 'package:senadedieu/provider/provider_ajouter_credit.dart';
 import 'package:senadedieu/provider/provider_ajouter_depense.dart';
 import 'package:senadedieu/provider/provider_ajouter_perte.dart';
 import 'package:senadedieu/provider/provider_ajouter_tranche.dart';
+import 'package:senadedieu/provider/provider_connnexion.dart';
+import 'package:senadedieu/provider/provider_created_account.dart';
 import 'package:senadedieu/provider/provider_gestion_depot.dart';
 import 'package:senadedieu/provider/provider_gestion_retrait.dart';
 import 'package:senadedieu/provider/provider_recharger_credit.dart';
@@ -32,6 +35,7 @@ class MyApp extends StatelessWidget {
       providers: [
         Provider<ServiceDB>(create: (_) => ServiceDB()),
         Provider<firebaseAuth>(create: (_) => firebaseAuth()),
+        Provider<Functions>(create: (_) => Functions()),
         StreamProvider(
             create: (context) => context.read<firebaseAuth>().utilisateur,
             initialData: null),
@@ -83,6 +87,12 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => ProviderGestionRetrait(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => providerCreateAccount(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ProviderConnexion(),
         ),
       ],
       child: MaterialApp(

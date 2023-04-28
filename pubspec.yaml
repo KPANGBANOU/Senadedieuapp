@@ -13,6 +13,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_sms: ^2.3.3
   firebase_core_platform_interface: 4.5.2
   firebase_core: ^2.1.0
   firebase_auth: ^4.0.2
@@ -34,7 +35,7 @@ dependencies:
   twilio_flutter: ^0.0.9
   connectivity_plus: ^3.0.2
   intl: ^0.18.0
-  sms_maintained: ^3.0.1
+
 
 
   http: ^0.13.5
