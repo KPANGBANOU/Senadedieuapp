@@ -13,12 +13,16 @@ import 'package:senadedieu/provider/provider_ajouter_credit.dart';
 import 'package:senadedieu/provider/provider_ajouter_depense.dart';
 import 'package:senadedieu/provider/provider_ajouter_perte.dart';
 import 'package:senadedieu/provider/provider_ajouter_tranche.dart';
+import 'package:senadedieu/provider/provider_change_index.dart';
 import 'package:senadedieu/provider/provider_connnexion.dart';
 import 'package:senadedieu/provider/provider_created_account.dart';
 import 'package:senadedieu/provider/provider_gestion_depot.dart';
 import 'package:senadedieu/provider/provider_gestion_retrait.dart';
+import 'package:senadedieu/provider/provider_new_password.dart';
+import 'package:senadedieu/provider/provider_profil.dart';
 import 'package:senadedieu/provider/provider_recharger_credit.dart';
 import 'package:senadedieu/provider/provider_reset_password.dart';
+import 'package:senadedieu/provider/provider_search.dart';
 import 'package:senadedieu/provider/provider_vente_credit.dart';
 
 import 'interface/splash.dart';
@@ -100,6 +104,18 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => ProviderResetPassword(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ProviderChangeIndex(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ProviderProfil(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ProviderNewPassword(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => Search(),
         ),
       ],
       child: MaterialApp(

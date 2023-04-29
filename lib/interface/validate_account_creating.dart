@@ -34,7 +34,6 @@ class ValidateUserEmail extends StatelessWidget {
 
   final int code;
   bool affice = false;
-  int _code = 0;
   TextEditingController _code_saisi = TextEditingController();
   FirebaseAuth auth = FirebaseAuth.instance;
   int leng = 0;
@@ -45,7 +44,6 @@ class ValidateUserEmail extends StatelessWidget {
     final function = Provider.of<Functions>(context);
     final _affiche = Provider.of<providerCreateAccount>(context);
     affice = _affiche.circular;
-    _code = _affiche.code;
     leng = email.length;
     return Scaffold(
       backgroundColor: Colors.lightBlue.shade900,
@@ -236,7 +234,7 @@ class ValidateUserEmail extends StatelessWidget {
                               builder: (context) => Wrapper(),
                             ));
                       } else if (statut_code == "100") {
-                        _speak("code invalid");
+                        _speak("code invalide");
                         _affiche.circular_false();
 
                         final snakbar = SnackBar(

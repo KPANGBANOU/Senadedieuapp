@@ -69,6 +69,7 @@ class Functions {
 
           await FirebaseFirestore.instance
               .collection("tranches")
+              .where("nom", isEqualTo: nom)
               .get()
               .then((value) {
             final tranche = value.docs.first;
@@ -87,13 +88,13 @@ class Functions {
             "benefice": 0.01
           });
 
-          final String statut_code1 = AjouterCredit(tranche_uid,
-              "MTN Bénin".toUpperCase(), 250, 0, 3000, user_uid) as String;
+          final String statut_code1 = await AjouterCredit(
+              tranche_uid, "MTN Bénin".toUpperCase(), 250, 0, 3000, user_uid);
 
-          final String statut_code2 = AjouterCredit(tranche_uid,
-              "Moov Bénin".toUpperCase(), 250, 0, 3000, user_uid) as String;
+          final String statut_code2 = await AjouterCredit(
+              tranche_uid, "Moov Bénin".toUpperCase(), 250, 0, 3000, user_uid);
 
-          if (statut_code1 != "200" || statut_code2 == "200)") {
+          if (statut_code1 != "200" || statut_code2 != "200") {
             return "202";
           } else {
             return "200";

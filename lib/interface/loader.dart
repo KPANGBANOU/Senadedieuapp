@@ -10,6 +10,7 @@ class Loader extends StatelessWidget {
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           CircularProgressIndicator(
             color: Colors.lightBlue.shade900,
@@ -17,12 +18,15 @@ class Loader extends StatelessWidget {
           SizedBox(
             height: 20,
           ),
-          Image.asset(
-            "images/logo.png",
-            scale: 4.5,
-            fit: BoxFit.cover,
-            height: 250,
-            width: 250,
+          Padding(
+            padding: const EdgeInsets.only(left: 40),
+            child: Image.asset(
+              "images/logo.png",
+              scale: 4.5,
+              fit: BoxFit.cover,
+              height: 250,
+              width: 250,
+            ),
           ),
         ],
       ),
