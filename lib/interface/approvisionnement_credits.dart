@@ -50,7 +50,7 @@ class ApprovisionnerListCredits extends StatelessWidget {
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.lightBlue.shade900,
+          backgroundColor: Colors.brown.shade900,
           onPressed: () {
             AddCredit(context, tranche_uid, user.uid);
           },
@@ -69,7 +69,7 @@ class ApprovisionnerListCredits extends StatelessWidget {
       appBar: AppBar(
         actions: [
           Image.asset(
-            "images/icon.jpeg",
+            "images/logo.png",
             height: 60,
             width: 60,
             scale: 2.5,
@@ -126,7 +126,7 @@ class ApprovisionnerListCredits extends StatelessWidget {
                 decoration: BoxDecoration(
                     image: DecorationImage(
                         image: AssetImage("images/communication2.jpg"),
-                        fit: BoxFit.fill)),
+                        fit: BoxFit.cover)),
               ),
               SizedBox(
                 height: 40,
@@ -179,7 +179,7 @@ class ApprovisionnerListCredits extends StatelessWidget {
             ],
           )),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.lightBlue.shade900,
+        backgroundColor: Colors.brown.shade900,
         onPressed: () {
           AddCredit(context, tranche_uid, user.uid);
         },
@@ -218,9 +218,9 @@ class ApprovisionnerListCredits extends StatelessWidget {
               Container(
                 height: 40,
                 width: 40,
-                decoration:
-                    BoxDecoration(borderRadius: BorderRadius.circular(20)),
-                color: Colors.lightBlue.shade900,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.lightBlue.shade900),
                 child: IconButton(
                     onPressed: () {
                       Navigator.of(dialogcontext).pop();

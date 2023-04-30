@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:senadedieu/interface/drawer%C3%A7admin.dart';
+import 'package:senadedieu/interface/drawer_admin.dart';
 import 'package:senadedieu/interface/stream_update_credit.dart';
 import 'package:senadedieu/models/credits.dart';
 import 'package:senadedieu/models/user.dart';
@@ -100,7 +100,7 @@ class LiquiditeCredit extends StatelessWidget {
               decoration: BoxDecoration(
                   color: Colors.white, borderRadius: BorderRadius.circular(20)),
               child: Padding(
-                padding: const EdgeInsets.only(left: 20),
+                padding: const EdgeInsets.only(left: 0),
                 child: Column(
                   // ignore: prefer_const_literals_to_create_immutables
                   children: [
@@ -283,19 +283,16 @@ class LiquiditeCredit extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Text(
-                          "Adresse électronique ",
+                          "E-Mail ",
                           style: GoogleFonts.alike(
                               color: Colors.lightBlue.shade800,
                               fontWeight: FontWeight.bold),
                         ),
-                        Expanded(
-                          child: Text(
-                            user.email,
-                            textAlign: TextAlign.justify,
-                            style: GoogleFonts.alike(
-                                color: Colors.lightBlue.shade800,
-                                fontWeight: FontWeight.bold),
-                          ),
+                        Text(
+                          user.email,
+                          style: GoogleFonts.alike(
+                              color: Colors.lightBlue.shade800,
+                              fontWeight: FontWeight.bold),
                         )
                       ],
                     ),

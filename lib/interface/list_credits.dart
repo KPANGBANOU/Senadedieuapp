@@ -6,7 +6,7 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:senadedieu/functions/functions.dart';
-import 'package:senadedieu/interface/drawer%C3%A7admin.dart';
+import 'package:senadedieu/interface/drawer_admin.dart';
 import 'package:senadedieu/interface/stram_liquidite_credit.dart';
 import 'package:senadedieu/models/credits.dart';
 import 'package:senadedieu/models/user.dart';

@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:senadedieu/interface/drawer_admin.dart';
 import 'package:senadedieu/models/budget_tranches.dart';
 import 'package:senadedieu/models/tranches.dart';
 
@@ -30,6 +31,7 @@ class TrancheAdmin extends StatelessWidget {
     }
     return Scaffold(
       backgroundColor: Colors.lightBlue.shade900,
+      drawer: DrawerAdmin(tranche_uid: ferme.uid),
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.black),
         backgroundColor: Colors.white,

@@ -191,7 +191,7 @@ class VentesCredits extends StatelessWidget {
             ],
           )),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.lightBlue.shade900,
+        backgroundColor: Colors.brown.shade900,
         onPressed: () {
           AddCredit(context, tranche_uid, user.uid);
         },
@@ -247,7 +247,9 @@ class VentesCredits extends StatelessWidget {
               Container(
                 height: 40,
                 width: 40,
-                decoration: BoxDecoration(color: Colors.lightBlue.shade900),
+                decoration: BoxDecoration(
+                    color: Colors.lightBlue.shade900,
+                    borderRadius: BorderRadius.circular(20)),
                 child: IconButton(
                     onPressed: () {
                       Navigator.of(dialogcontext).pop();
@@ -272,9 +274,6 @@ class VentesCredits extends StatelessWidget {
                     style: GoogleFonts.alike(fontWeight: FontWeight.bold),
                   ),
                 ),
-                SizedBox(
-                  height: 7,
-                ),
                 TextField(
                   onChanged: (value) {
                     provider.change_montant(value);
@@ -298,9 +297,6 @@ class VentesCredits extends StatelessWidget {
                     style: GoogleFonts.alike(fontWeight: FontWeight.bold),
                   ),
                 ),
-                SizedBox(
-                  height: 7,
-                ),
                 TextField(
                   onChanged: (value) {
                     provider.change_nom_client(value, nomClient);
@@ -323,9 +319,6 @@ class VentesCredits extends StatelessWidget {
                     textAlign: TextAlign.justify,
                     style: GoogleFonts.alike(fontWeight: FontWeight.bold),
                   ),
-                ),
-                SizedBox(
-                  height: 7,
                 ),
                 TextField(
                   onChanged: (value) {
@@ -352,9 +345,6 @@ class VentesCredits extends StatelessWidget {
                     textAlign: TextAlign.justify,
                     style: GoogleFonts.alike(fontWeight: FontWeight.bold),
                   ),
-                ),
-                SizedBox(
-                  height: 7,
                 ),
                 TextField(
                   onChanged: (value) {
@@ -410,14 +400,11 @@ class VentesCredits extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.all(4.0),
                             child: Text(
-                              "Décrivez la perte",
-                              textAlign: TextAlign.justify,
+                              "Décrivez la perte réalisé",
+                              textAlign: TextAlign.left,
                               style: GoogleFonts.alike(
                                   fontWeight: FontWeight.bold),
                             ),
-                          ),
-                          SizedBox(
-                            height: 7,
                           ),
                           TextField(
                             onChanged: (value) {
@@ -441,9 +428,6 @@ class VentesCredits extends StatelessWidget {
                             "S'agit il d'une vente à crédit ?",
                             style:
                                 GoogleFonts.alike(fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(
-                            height: 8,
                           ),
                           RadioListTile(
                             title: Text(
@@ -475,137 +459,145 @@ class VentesCredits extends StatelessWidget {
             ),
           ),
           actions: [
-            ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.lightBlue.shade900),
-                onPressed: () async {
-                  provider.affiche_true();
-                  final String statut_code = await function.VenteCredit(
-                      dialogcontext,
-                      tranche_uid,
-                      value,
-                      user.uid,
-                      descriptionPerte.text,
-                      payer,
-                      perte,
-                      montant,
-                      nomClient.text,
-                      numero_client,
-                      numero,
-                      budget.uid,
-                      budget.solde_total,
-                      budget.perte,
-                      budget.benefice,
-                      budget_tranche_uid,
-                      budget_tranche_solde_total,
-                      budget_tranche_benefice,
-                      budget_tranche_perte);
+            Padding(
+              padding: const EdgeInsets.only(bottom: 20),
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.lightBlue.shade900),
+                  onPressed: () async {
+                    provider.affiche_true();
+                    final String statut_code = await function.VenteCredit(
+                        dialogcontext,
+                        tranche_uid,
+                        value,
+                        user.uid,
+                        descriptionPerte.text,
+                        payer,
+                        perte,
+                        montant,
+                        nomClient.text,
+                        numero_client,
+                        numero,
+                        budget.uid,
+                        budget.solde_total,
+                        budget.perte,
+                        budget.benefice,
+                        budget_tranche_uid,
+                        budget_tranche_solde_total,
+                        budget_tranche_benefice,
+                        budget_tranche_perte);
 
-                  if (statut_code == "202") {
-                    _speak("Vérifiez si vous avez activé les données mobiles");
-                    provider.affiche_false();
-                    final snakbar = SnackBar(
-                      content: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          "Une erreur s'est produite",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
+                    if (statut_code == "202") {
+                      _speak(
+                          "Vérifiez si vous avez activé les données mobiles");
+                      provider.affiche_false();
+                      final snakbar = SnackBar(
+                        content: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "Une erreur s'est produite",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
-                      ),
-                      backgroundColor: Colors.redAccent.withOpacity(.7),
-                      elevation: 1,
-                      behavior: SnackBarBehavior.floating,
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snakbar);
-                  } else if (statut_code == "100") {
-                    _speak("Champs invalides");
-                    provider.affiche_false();
-                    final snakbar = SnackBar(
-                      content: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          "Champs invalides",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
+                        backgroundColor: Colors.redAccent.withOpacity(.7),
+                        elevation: 1,
+                        behavior: SnackBarBehavior.floating,
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snakbar);
+                    } else if (statut_code == "100") {
+                      _speak("Champs invalides");
+                      provider.affiche_false();
+                      final snakbar = SnackBar(
+                        content: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "Champs invalides",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
-                      ),
-                      backgroundColor: Colors.redAccent.withOpacity(.7),
-                      elevation: 1,
-                      behavior: SnackBarBehavior.floating,
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snakbar);
-                  } else if (statut_code == "101") {
-                    _speak("Stock insuffisant");
-                    provider.affiche_false();
-                    final snakbar = SnackBar(
-                      content: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          "Stock insuffisant",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
+                        backgroundColor: Colors.redAccent.withOpacity(.7),
+                        elevation: 1,
+                        behavior: SnackBarBehavior.floating,
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snakbar);
+                    } else if (statut_code == "101") {
+                      _speak("Stock insuffisant");
+                      provider.affiche_false();
+                      final snakbar = SnackBar(
+                        content: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "Stock insuffisant",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
-                      ),
-                      backgroundColor: Colors.redAccent.withOpacity(.7),
-                      elevation: 1,
-                      behavior: SnackBarBehavior.floating,
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snakbar);
-                  } else {
-                    _speak("Effectué avec succès");
-                    provider.affiche_false();
-                    final snakbar = SnackBar(
-                      content: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          "Effectué avec succès",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
+                        backgroundColor: Colors.redAccent.withOpacity(.7),
+                        elevation: 1,
+                        behavior: SnackBarBehavior.floating,
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snakbar);
+                    } else {
+                      _speak("Effectué avec succès");
+                      provider.affiche_false();
+                      final snakbar = SnackBar(
+                        content: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "Effectué avec succès",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
-                      ),
-                      backgroundColor: Colors.black87,
-                      elevation: 1,
-                      behavior: SnackBarBehavior.floating,
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snakbar);
-                    Navigator.of(dialogcontext).pop();
-                  }
-                },
-                child: affiche
-                    ? CircularProgressIndicator(
-                        color: Colors.white,
-                      )
-                    : perte
-                        ? Text(
-                            "Enregistrez la perte".toUpperCase(),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: GoogleFonts.alike(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white),
-                          )
-                        : !payer
-                            ? Text(
-                                "Enregistrez le crédit".toUpperCase(),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: GoogleFonts.alike(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white),
-                              )
-                            : Text(
-                                "Enregistrez la vente".toUpperCase(),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: GoogleFonts.alike(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white),
-                              ))
+                        backgroundColor: Colors.black87,
+                        elevation: 1,
+                        behavior: SnackBarBehavior.floating,
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snakbar);
+                      Navigator.of(dialogcontext).pop();
+                    }
+                  },
+                  child: affiche
+                      ? CircularProgressIndicator(
+                          color: Colors.white,
+                        )
+                      : perte
+                          ? Text(
+                              "Enregistrez la perte".toUpperCase(),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.alike(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            )
+                          : !payer
+                              ? Text(
+                                  "Enregistrez le crédit".toUpperCase(),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: GoogleFonts.alike(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                )
+                              : Text(
+                                  "Enregistrez la vente".toUpperCase(),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: GoogleFonts.alike(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                )),
+            )
           ],
           // ignore: prefer_const_literals_to_create_immutables
         );
