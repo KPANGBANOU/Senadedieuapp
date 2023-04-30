@@ -272,7 +272,7 @@ Future<void> AddCredit(
     barrierDismissible: false,
     builder: (BuildContext dialogcontext) {
       final provider = Provider.of<ProviderAjouterCredit>(dialogcontext);
-      final function = Provider.of<Functions>(context);
+      final function = Provider.of<Functions>(dialogcontext);
       String nom = provider.nom;
       int benefice_sur_5000 = provider.benefice;
       int montant_initial = provider.montant_initial;

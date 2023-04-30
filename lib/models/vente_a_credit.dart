@@ -11,6 +11,7 @@ class VenteACredits {
   final String updated_at;
   final bool paye;
   final String client_uid;
+  final String client_nom;
   final String user_uid;
   final int montant;
   final double benefice;
@@ -23,6 +24,7 @@ class VenteACredits {
     required this.updated_at,
     required this.paye,
     required this.client_uid,
+    required this.client_nom,
     required this.user_uid,
     required this.montant,
     required this.benefice,
@@ -35,6 +37,7 @@ class VenteACredits {
     Timestamp created = (document.data() as Map)['created_at'];
     Timestamp updated = (document.data() as Map)['updated_at'];
     return VenteACredits(
+        client_nom: (document.data() as Map)['client_nom'],
         achat: (document.data() as Map)['achat'],
         numero: (document.data() as Map)['numero'],
         uid: document.id,
@@ -58,6 +61,7 @@ class VenteACredits {
     String? updated_at,
     bool? paye,
     String? client_uid,
+    String? client_nom,
     String? user_uid,
     int? montant,
     double? benefice,
@@ -71,6 +75,7 @@ class VenteACredits {
       updated_at: updated_at ?? this.updated_at,
       paye: paye ?? this.paye,
       client_uid: client_uid ?? this.client_uid,
+      client_nom: client_nom ?? this.client_nom,
       user_uid: user_uid ?? this.user_uid,
       montant: montant ?? this.montant,
       benefice: benefice ?? this.benefice,
@@ -88,6 +93,7 @@ class VenteACredits {
     result.addAll({'updated_at': updated_at});
     result.addAll({'paye': paye});
     result.addAll({'client_uid': client_uid});
+    result.addAll({'client_nom': client_nom});
     result.addAll({'user_uid': user_uid});
     result.addAll({'montant': montant});
     result.addAll({'benefice': benefice});
@@ -105,6 +111,7 @@ class VenteACredits {
       updated_at: map['updated_at'] ?? '',
       paye: map['paye'] ?? false,
       client_uid: map['client_uid'] ?? '',
+      client_nom: map['client_nom'] ?? '',
       user_uid: map['user_uid'] ?? '',
       montant: map['montant']?.toInt() ?? 0,
       benefice: map['benefice']?.toDouble() ?? 0.0,
@@ -121,7 +128,7 @@ class VenteACredits {
 
   @override
   String toString() {
-    return 'VenteACredits(uid: $uid, created_at: $created_at, updated_at: $updated_at, paye: $paye, client_uid: $client_uid, user_uid: $user_uid, montant: $montant, benefice: $benefice, credit_uid: $credit_uid, numero: $numero, achat: $achat)';
+    return 'VenteACredits(uid: $uid, created_at: $created_at, updated_at: $updated_at, paye: $paye, client_uid: $client_uid, client_nom: $client_nom, user_uid: $user_uid, montant: $montant, benefice: $benefice, credit_uid: $credit_uid, numero: $numero, achat: $achat)';
   }
 
   @override
@@ -134,6 +141,7 @@ class VenteACredits {
         other.updated_at == updated_at &&
         other.paye == paye &&
         other.client_uid == client_uid &&
+        other.client_nom == client_nom &&
         other.user_uid == user_uid &&
         other.montant == montant &&
         other.benefice == benefice &&
@@ -149,6 +157,7 @@ class VenteACredits {
         updated_at.hashCode ^
         paye.hashCode ^
         client_uid.hashCode ^
+        client_nom.hashCode ^
         user_uid.hashCode ^
         montant.hashCode ^
         benefice.hashCode ^

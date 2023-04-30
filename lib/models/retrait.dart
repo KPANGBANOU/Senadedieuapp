@@ -16,6 +16,7 @@ class Retraits {
   final String created_at_heure;
   final String credit_nom;
   final String numero_retrait;
+  final String client_nom;
   Retraits({
     required this.uid,
     required this.user_uid,
@@ -27,11 +28,13 @@ class Retraits {
     required this.created_at_heure,
     required this.credit_nom,
     required this.numero_retrait,
+    required this.client_nom,
   });
 
   factory Retraits.FromFirestore(DocumentSnapshot document) {
     Timestamp created = (document.data() as Map)['created_at'];
     return Retraits(
+      client_nom: (document.data() as Map)['client_nom'],
       numero_retrait: (document.data() as Map)['numero_retrait'],
       credit_nom: (document.data() as Map)['credit_non'],
       uid: document.id,
@@ -56,6 +59,7 @@ class Retraits {
     String? created_at_heure,
     String? credit_nom,
     String? numero_retrait,
+    String? client_nom,
   }) {
     return Retraits(
       uid: uid ?? this.uid,
@@ -68,6 +72,7 @@ class Retraits {
       created_at_heure: created_at_heure ?? this.created_at_heure,
       credit_nom: credit_nom ?? this.credit_nom,
       numero_retrait: numero_retrait ?? this.numero_retrait,
+      client_nom: client_nom ?? this.client_nom,
     );
   }
 
@@ -84,6 +89,7 @@ class Retraits {
     result.addAll({'created_at_heure': created_at_heure});
     result.addAll({'credit_nom': credit_nom});
     result.addAll({'numero_retrait': numero_retrait});
+    result.addAll({'client_nom': client_nom});
 
     return result;
   }
@@ -100,6 +106,7 @@ class Retraits {
       created_at_heure: map['created_at_heure'] ?? '',
       credit_nom: map['credit_nom'] ?? '',
       numero_retrait: map['numero_retrait'] ?? '',
+      client_nom: map['client_nom'] ?? '',
     );
   }
 
@@ -110,7 +117,7 @@ class Retraits {
 
   @override
   String toString() {
-    return 'Retraits(uid: $uid, user_uid: $user_uid, client_uid: $client_uid, credit_uid: $credit_uid, montant: $montant, benefice: $benefice, created_at: $created_at, created_at_heure: $created_at_heure, credit_nom: $credit_nom, numero_retrait: $numero_retrait)';
+    return 'Retraits(uid: $uid, user_uid: $user_uid, client_uid: $client_uid, credit_uid: $credit_uid, montant: $montant, benefice: $benefice, created_at: $created_at, created_at_heure: $created_at_heure, credit_nom: $credit_nom, numero_retrait: $numero_retrait, client_nom: $client_nom)';
   }
 
   @override
@@ -127,7 +134,8 @@ class Retraits {
         other.created_at == created_at &&
         other.created_at_heure == created_at_heure &&
         other.credit_nom == credit_nom &&
-        other.numero_retrait == numero_retrait;
+        other.numero_retrait == numero_retrait &&
+        other.client_nom == client_nom;
   }
 
   @override
@@ -141,6 +149,7 @@ class Retraits {
         created_at.hashCode ^
         created_at_heure.hashCode ^
         credit_nom.hashCode ^
-        numero_retrait.hashCode;
+        numero_retrait.hashCode ^
+        client_nom.hashCode;
   }
 }

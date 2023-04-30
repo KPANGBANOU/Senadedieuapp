@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
@@ -18,6 +19,7 @@ class VenteCredits {
   final String created_at_annee;
   final int during;
   final String numero;
+  final String client_nom;
   VenteCredits({
     required this.uid,
     required this.user_uid,
@@ -32,12 +34,14 @@ class VenteCredits {
     required this.created_at_annee,
     required this.during,
     required this.numero,
+    required this.client_nom,
   });
 
   factory VenteCredits.FromFirestore(DocumentSnapshot document) {
     Timestamp created = (document.data() as Map)['created_at'];
 
     return VenteCredits(
+        client_nom: (document.data() as Map)['client_nom'],
         credit_nom: (document.data() as Map)['credit_nom'],
         numero: (document.data() as Map)['numero'],
         uid: document.id,
@@ -67,6 +71,7 @@ class VenteCredits {
     String? created_at_annee,
     int? during,
     String? numero,
+    String? client_nom,
   }) {
     return VenteCredits(
       uid: uid ?? this.uid,
@@ -82,6 +87,7 @@ class VenteCredits {
       created_at_annee: created_at_annee ?? this.created_at_annee,
       during: during ?? this.during,
       numero: numero ?? this.numero,
+      client_nom: client_nom ?? this.client_nom,
     );
   }
 
@@ -101,6 +107,7 @@ class VenteCredits {
     result.addAll({'created_at_annee': created_at_annee});
     result.addAll({'during': during});
     result.addAll({'numero': numero});
+    result.addAll({'client_nom': client_nom});
 
     return result;
   }
@@ -120,6 +127,7 @@ class VenteCredits {
       created_at_annee: map['created_at_annee'] ?? '',
       during: map['during']?.toInt() ?? 0,
       numero: map['numero'] ?? '',
+      client_nom: map['client_nom'] ?? '',
     );
   }
 
@@ -130,7 +138,7 @@ class VenteCredits {
 
   @override
   String toString() {
-    return 'VenteCredits(uid: $uid, user_uid: $user_uid, credit_uid: $credit_uid, credit_nom: $credit_nom, client_uid: $client_uid, montant: $montant, benefice: $benefice, created_at: $created_at, created_at_heure: $created_at_heure, created_at_mois: $created_at_mois, created_at_annee: $created_at_annee, during: $during, numero: $numero)';
+    return 'VenteCredits(uid: $uid, user_uid: $user_uid, credit_uid: $credit_uid, credit_nom: $credit_nom, client_uid: $client_uid, montant: $montant, benefice: $benefice, created_at: $created_at, created_at_heure: $created_at_heure, created_at_mois: $created_at_mois, created_at_annee: $created_at_annee, during: $during, numero: $numero, client_nom: $client_nom)';
   }
 
   @override
@@ -150,7 +158,8 @@ class VenteCredits {
         other.created_at_mois == created_at_mois &&
         other.created_at_annee == created_at_annee &&
         other.during == during &&
-        other.numero == numero;
+        other.numero == numero &&
+        other.client_nom == client_nom;
   }
 
   @override
@@ -167,6 +176,7 @@ class VenteCredits {
         created_at_mois.hashCode ^
         created_at_annee.hashCode ^
         during.hashCode ^
-        numero.hashCode;
+        numero.hashCode ^
+        client_nom.hashCode;
   }
 }

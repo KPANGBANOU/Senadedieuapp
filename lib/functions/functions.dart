@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_interpolation_to_compose_strings, unused_local_variable, unnecessary_null_comparison, use_build_context_synchronously
+// ignore_for_file: prefer_interpolation_to_compose_strings, unused_local_variable, unnecessary_null_comparison, use_build_context_synchronously, avoid_function_literals_in_foreach_calls
 
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -544,6 +544,9 @@ class Functions {
                     .doc(tranche_uid)
                     .collection("clients")
                     .add({
+                  "total_depot": 0,
+                  "total_depot_non_paye": 0,
+                  "total_retrait": 0,
                   "nom": nom_client,
                   "numero": numero_client,
                   "dernier_achat": DateTime.now(),
@@ -592,6 +595,7 @@ class Functions {
                   .doc(tranche_uid)
                   .collection("vente_a_credits")
                   .add({
+                "client_nom": nom_client,
                 "created_at": DateTime.now(),
                 "updated_at": DateTime.now(),
                 "achat": "Ce client a achété " +
@@ -634,6 +638,9 @@ class Functions {
                     .doc(tranche_uid)
                     .collection("clients")
                     .add({
+                  "total_retrait": 0,
+                  "total_depot": 0,
+                  "total_depot_non_paye": 0,
                   "nom": nom_client,
                   "numero": numero_client,
                   "dernier_achat": DateTime.now(),
@@ -683,6 +690,7 @@ class Functions {
                   .doc(tranche_uid)
                   .collection("vente_credits")
                   .add({
+                "client_nom": nom_client,
                 "created_at": DateTime.now(),
                 "user_uid": user_uid,
                 "numero": numero,
@@ -1162,6 +1170,407 @@ class Functions {
         } else {
           return "202";
         }
+      }
+    } catch (e) {
+      return "202";
+    }
+  }
+
+  Future<String> FaireDepot(
+    String tranche_uid,
+    String user_uid,
+    String credit_nom,
+    int montant,
+    bool payer,
+    String client_nom,
+    String numero,
+    String numero_client,
+    String budget_uid,
+    double budget_benefice,
+    String budget_tranche_uid,
+    double budget_tranche_benefice,
+  ) async {
+    try {
+      if (tranche_uid.isEmpty ||
+          credit_nom.isEmpty ||
+          montant <= 0 ||
+          client_nom.isEmpty ||
+          numero.isEmpty ||
+          numero_client.isEmpty ||
+          numero.length != 8 ||
+          numero_client.length != 8) {
+        // validation de données
+        return "100";
+      } else {
+        String credit_uid = "";
+        String client_uid = "";
+        int montant_disponible = 0;
+        int total_depot = 0;
+        int total_depot_non_paye = 0;
+        double benefice = 0;
+        double benefice_cumule = 0;
+        int seuil_approvisionnement = 0;
+        await FirebaseFirestore.instance
+            .collection("tranches")
+            .doc(tranche_uid)
+            .collection("credits")
+            .where("nom", isEqualTo: credit_nom)
+            .get()
+            .then((value) {
+          final credit = value.docs.first;
+          seuil_approvisionnement = credit.data()['seuil_approvisionnement'];
+          benefice = credit.data()['benefice'];
+          benefice_cumule = credit.data()['benefice_cumule'];
+          credit_uid = credit.id;
+          montant_disponible = credit.data()['montant_disponible'];
+        });
+
+        if (montant > montant_disponible) {
+          //stock insuffisant
+          return "201";
+        } else {
+          // si le depot n'est pas payé
+          final request = await FirebaseFirestore.instance
+              .collection("tranches")
+              .doc(tranche_uid)
+              .collection("clients")
+              .where("numero", isEqualTo: numero_client)
+              .get();
+
+          final bool is_empty = request.docs.isEmpty;
+
+          if (is_empty) {
+            // si c'est le premier achat du client
+            await FirebaseFirestore.instance
+                .collection("tranches")
+                .doc(tranche_uid)
+                .collection("clients")
+                .add({
+              "total_depot": montant,
+              "total_depot_non_paye": payer ? 0 : montant,
+              "total_retrait": 0,
+              "nom": client_nom,
+              "numero": numero_client,
+              "dernier_achat": DateTime.now(),
+              "total_achat": 0,
+              "total_non_paye": 0
+            });
+
+            await FirebaseFirestore.instance // rechercher le client
+                .collection("tranches")
+                .doc(tranche_uid)
+                .collection("clients")
+                .where("numero", isEqualTo: numero_client)
+                .get()
+                .then((value) {
+              final mon_client = value.docs.first;
+              client_uid = mon_client.id;
+            });
+          } else {
+            await FirebaseFirestore.instance // mise à jour du client
+                .collection("tranches")
+                .doc(tranche_uid)
+                .collection("clients")
+                .where("numero", isEqualTo: numero_client)
+                .get()
+                .then((value) {
+              final client = value.docs.first;
+              client_uid = client.id;
+              total_depot = client.data()['total_depot'];
+              total_depot_non_paye = client.data()['total_depot_non_paye'];
+            });
+
+            await FirebaseFirestore.instance
+                .collection("tranches")
+                .doc(tranche_uid)
+                .collection("clients")
+                .doc(client_uid)
+                .update({
+              "derniere_achat": DateTime.now(),
+              "total_depot": total_depot + montant,
+              "total_non_paye":
+                  payer ? total_depot_non_paye : total_depot_non_paye + montant
+            });
+          }
+
+          await FirebaseFirestore.instance
+              .collection("tranches")
+              .doc(tranche_uid)
+              .collection("credits")
+              .doc(credit_uid)
+              .update({
+            "montant_disponible": montant_disponible - montant,
+            "benefice": payer ? benefice + (montant * 50) / 15500 : benefice,
+            "benefice_cumule": payer
+                ? benefice_cumule + (montant * 50) / 15500
+                : benefice_cumule
+          });
+
+          if (montant_disponible - montant <= seuil_approvisionnement) {
+            await FirebaseFirestore.instance
+                .collection("tranches")
+                .doc(tranche_uid)
+                .collection("credits")
+                .doc(credit_uid)
+                .update({"approvisionne": true});
+          }
+
+          await FirebaseFirestore.instance
+              .collection("budget")
+              .doc(budget_uid)
+              .update({
+            "benefice": payer ? benefice + (montant * 50) / 15500 : benefice
+          });
+
+          await FirebaseFirestore.instance
+              .collection("tranches")
+              .doc(tranche_uid)
+              .collection("budget")
+              .doc(budget_tranche_uid)
+              .update({
+            "benefice": payer
+                ? budget_tranche_benefice + (montant * 50) / 15500
+                : budget_tranche_benefice
+          });
+
+          await FirebaseFirestore.instance
+              .collection("tranches")
+              .doc(tranche_uid)
+              .collection("depots")
+              .add({
+            "user_uid": user_uid,
+            "client_uid": client_uid,
+            "credit_uid": credit_uid,
+            "client_nom": client_nom,
+            "credit_nom": credit_nom,
+            "montant": montant,
+            "benefice": (montant * 50) / 15500,
+            "paye": payer,
+            "numero_depot": numero,
+            "created_at": DateTime.now(),
+            "updated_at": DateTime.now()
+          });
+
+          return "200";
+        }
+      }
+    } catch (e) {
+      return "202";
+    }
+  }
+
+  Future<String> PayerDepot(
+      String tranche_uid,
+      String credit_uid,
+      String depot_uid,
+      String client_uid,
+      double depot_benefice,
+      int depot_montant,
+      int client_total_depot_non_paye,
+      String budget_uid,
+      String budget_tranche_uid,
+      double budget_benefice,
+      double budget_tranche_benefice) async {
+    try {
+      if (tranche_uid.isEmpty ||
+          credit_uid.isEmpty ||
+          depot_uid.isEmpty ||
+          client_uid.isEmpty ||
+          depot_montant > client_total_depot_non_paye ||
+          budget_uid.isEmpty ||
+          budget_tranche_uid.isEmpty ||
+          depot_benefice <= 0) {
+        return "100";
+      } else {
+        await FirebaseFirestore.instance
+            .collection("tranches")
+            .doc(tranche_uid)
+            .collection("budget")
+            .doc(budget_tranche_uid)
+            .update({"benefice": budget_tranche_benefice + depot_benefice});
+
+        await FirebaseFirestore.instance
+            .collection("budgetb")
+            .doc(budget_uid)
+            .update({"benefice": budget_benefice + depot_benefice});
+
+        await FirebaseFirestore.instance
+            .collection("tranches")
+            .doc(tranche_uid)
+            .collection("depots")
+            .doc(depot_uid)
+            .update({"paye": true});
+        await FirebaseFirestore.instance
+            .collection("tranches")
+            .doc(tranche_uid)
+            .collection("clients")
+            .doc(client_uid)
+            .update({
+          "total_depot_non_paye": client_total_depot_non_paye - depot_montant
+        });
+        return "200";
+      }
+    } catch (e) {
+      return "202";
+    }
+  }
+
+  Future<String> PayerCreditClient(
+      String tranche_uid,
+      String client_uid,
+      int client_total_non_paye,
+      int client_depot_total_non_paye,
+      String budget_uid,
+      int budget_solde_total,
+      double budget_benefice,
+      String budget_tranche_uid,
+      int budget_tranche_solde_total,
+      double budget_tranche_benefice) async {
+    try {
+      if (tranche_uid.isEmpty ||
+          client_uid.isEmpty ||
+          budget_uid.isEmpty ||
+          budget_tranche_uid.isEmpty) {
+        return "100";
+      } else {
+        double credit_benefice = 0;
+        double credit_benefice_cumule = 0;
+        if (client_depot_total_non_paye > 0) {
+          final depot_request = await FirebaseFirestore.instance
+              .collection("tranches")
+              .doc(tranche_uid)
+              .collection("depots")
+              .where("client_uid", isEqualTo: client_uid)
+              .get();
+
+          final depots = depot_request.docs;
+
+          depots.forEach((element) async {
+            if (!(element.data()["paye"])) {
+              await FirebaseFirestore.instance
+                  .collection("tranches")
+                  .doc(tranche_uid)
+                  .collection("credits")
+                  .doc(element.data()['credit_uid'])
+                  .get()
+                  .then((value) {
+                credit_benefice = (value.data() as Map)['benefice'];
+                credit_benefice_cumule =
+                    (value.data() as Map)['benefice_cumule'];
+              });
+
+              await FirebaseFirestore.instance
+                  .collection("tranches")
+                  .doc(tranche_uid)
+                  .collection("credits")
+                  .doc(element.data()['credit_uid'])
+                  .update({
+                "benefice_cumule":
+                    credit_benefice_cumule + element.data()['benefice'],
+                "benefice": credit_benefice + element.data()['benefice']
+              });
+              await FirebaseFirestore.instance
+                  .collection("tranches")
+                  .doc(tranche_uid)
+                  .collection("depots")
+                  .doc(element.id)
+                  .update({"paye": true});
+              await FirebaseFirestore.instance
+                  .collection("tranches")
+                  .doc(tranche_uid)
+                  .collection("budget")
+                  .doc(budget_tranche_uid)
+                  .update({
+                "benefice":
+                    budget_tranche_benefice + (element.data())['benefice']
+              });
+              await FirebaseFirestore.instance
+                  .collection("budget")
+                  .doc(budget_uid)
+                  .update({
+                "benefice": budget_benefice + element.data()['benefice']
+              });
+            }
+          });
+
+          await FirebaseFirestore.instance
+              .collection("tranches")
+              .doc(tranche_uid)
+              .collection("clients")
+              .doc(client_uid)
+              .update({"total_depot_non_paye": 0});
+        }
+
+        if (client_total_non_paye > 0) {
+          final vente_request = await FirebaseFirestore.instance
+              .collection("tranches")
+              .doc(tranche_uid)
+              .collection("vente_a_credits")
+              .where("client_uid", isEqualTo: client_uid)
+              .get();
+
+          final ventes = vente_request.docs;
+
+          ventes.forEach((element) async {
+            if (!(element.data()["paye"])) {
+              await FirebaseFirestore.instance
+                  .collection("tranches")
+                  .doc(tranche_uid)
+                  .collection("credits")
+                  .doc(element.data()['credit_uid'])
+                  .get()
+                  .then((value) {
+                credit_benefice = (value.data() as Map)['benefice'];
+                credit_benefice_cumule =
+                    (value.data() as Map)['benefice_cumule'];
+              });
+
+              await FirebaseFirestore.instance
+                  .collection("tranches")
+                  .doc(tranche_uid)
+                  .collection("credits")
+                  .doc(element.data()['credit_uid'])
+                  .update({
+                "benefice_cumule":
+                    credit_benefice_cumule + element.data()['benefice'],
+                "benefice": credit_benefice + element.data()['benefice']
+              });
+              await FirebaseFirestore.instance
+                  .collection("tranches")
+                  .doc(tranche_uid)
+                  .collection("vente_a_credits")
+                  .doc(element.id)
+                  .update({"paye": true});
+              await FirebaseFirestore.instance
+                  .collection("tranches")
+                  .doc(tranche_uid)
+                  .collection("budget")
+                  .doc(budget_tranche_uid)
+                  .update({
+                "solde_total":
+                    budget_tranche_solde_total + element.data()['montant'],
+                "benefice":
+                    budget_tranche_benefice + (element.data())['benefice']
+              });
+              await FirebaseFirestore.instance
+                  .collection("budget")
+                  .doc(budget_uid)
+                  .update({
+                "solde_total": budget_solde_total + element.data()['montant'],
+                "benefice": budget_benefice + element.data()['benefice']
+              });
+            }
+          });
+
+          await FirebaseFirestore.instance
+              .collection("tranches")
+              .doc(tranche_uid)
+              .collection("clients")
+              .doc(client_uid)
+              .update({"total_depot_non_paye": 0});
+        }
+
+        return "200";
       }
     } catch (e) {
       return "202";

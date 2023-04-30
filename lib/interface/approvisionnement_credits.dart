@@ -262,82 +262,88 @@ class ApprovisionnerListCredits extends StatelessWidget {
                 SizedBox(
                   height: 15,
                 ),
-                ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.brown.shade900),
-                    onPressed: () async {
-                      provider.affiche_true();
-                      final String statut_code =
-                          await function.ApprovisionnementCredit(
-                              tranche_uid, value, montant, user_uid);
+                Padding(
+                  padding: const EdgeInsets.only(left: 20),
+                  child: Expanded(
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.brown.shade900),
+                        onPressed: () async {
+                          provider.affiche_true();
+                          final String statut_code =
+                              await function.ApprovisionnementCredit(
+                                  tranche_uid, value, montant, user_uid);
 
-                      if (statut_code == "202") {
-                        _speak(
-                            "Vérifiez si vous avez activé les données mobiles");
-                        provider.affiche_false();
-                        final snakbar = SnackBar(
-                          content: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "Une erreur s'est produite",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          backgroundColor: Colors.redAccent.withOpacity(.7),
-                          elevation: 1,
-                          behavior: SnackBarBehavior.floating,
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(snakbar);
-                      } else if (statut_code == "100") {
-                        _speak("Montant invalide");
-                        provider.affiche_false();
-                        final snakbar = SnackBar(
-                          content: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "Montant invalide",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          backgroundColor: Colors.redAccent.withOpacity(.7),
-                          elevation: 1,
-                          behavior: SnackBarBehavior.floating,
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(snakbar);
-                      } else {
-                        _speak("Approvisionnement éffectué avec succès");
-                        provider.affiche_false();
-                        final snakbar = SnackBar(
-                          content: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "Approvisionnement éffectué avec succès",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          backgroundColor: Colors.black87,
-                          elevation: 1,
-                          behavior: SnackBarBehavior.floating,
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(snakbar);
-                        Navigator.of(dialogcontext).pop();
-                      }
-                    },
-                    child: Text(
-                      "Réchargement".toUpperCase(),
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.alike(
-                          fontWeight: FontWeight.bold, color: Colors.white),
-                    ))
+                          if (statut_code == "202") {
+                            _speak(
+                                "Vérifiez si vous avez activé les données mobiles");
+                            provider.affiche_false();
+                            final snakbar = SnackBar(
+                              content: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  "Une erreur s'est produite",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              backgroundColor: Colors.redAccent.withOpacity(.7),
+                              elevation: 1,
+                              behavior: SnackBarBehavior.floating,
+                            );
+                            ScaffoldMessenger.of(context).showSnackBar(snakbar);
+                          } else if (statut_code == "100") {
+                            _speak("Montant invalide");
+                            provider.affiche_false();
+                            final snakbar = SnackBar(
+                              content: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  "Montant invalide",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              backgroundColor: Colors.redAccent.withOpacity(.7),
+                              elevation: 1,
+                              behavior: SnackBarBehavior.floating,
+                            );
+                            ScaffoldMessenger.of(context).showSnackBar(snakbar);
+                          } else {
+                            _speak("Approvisionnement éffectué avec succès");
+                            provider.affiche_false();
+                            provider.change_montant("");
+                            final snakbar = SnackBar(
+                              content: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  "Approvisionnement éffectué avec succès",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              backgroundColor: Colors.black87,
+                              elevation: 1,
+                              behavior: SnackBarBehavior.floating,
+                            );
+                            ScaffoldMessenger.of(context).showSnackBar(snakbar);
+                            Navigator.of(dialogcontext).pop();
+                          }
+                        },
+                        child: Text(
+                          "Réchargement".toUpperCase(),
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.alike(
+                              fontWeight: FontWeight.bold, color: Colors.white),
+                        )),
+                  ),
+                )
               ],
             ),
           ),

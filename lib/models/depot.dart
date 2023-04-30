@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
@@ -8,6 +9,7 @@ class Depots {
   final String uid;
   final String user_uid;
   final String client_uid;
+  final String client_nom;
   final String credit_uid;
   final int montant;
   final double benefice;
@@ -22,6 +24,7 @@ class Depots {
     required this.uid,
     required this.user_uid,
     required this.client_uid,
+    required this.client_nom,
     required this.credit_uid,
     required this.montant,
     required this.benefice,
@@ -38,6 +41,7 @@ class Depots {
     Timestamp created = (document.data() as Map)['created_at'];
     Timestamp updated = (document.data() as Map)['updated_at'];
     return Depots(
+        client_nom: (document.data() as Map)['client_nom'],
         numero_depot: (document.data() as Map)['numero_depot'],
         credit_nom: (document.data() as Map)['credit_non'],
         uid: document.id,
@@ -57,6 +61,7 @@ class Depots {
     String? uid,
     String? user_uid,
     String? client_uid,
+    String? client_nom,
     String? credit_uid,
     int? montant,
     double? benefice,
@@ -72,6 +77,7 @@ class Depots {
       uid: uid ?? this.uid,
       user_uid: user_uid ?? this.user_uid,
       client_uid: client_uid ?? this.client_uid,
+      client_nom: client_nom ?? this.client_nom,
       credit_uid: credit_uid ?? this.credit_uid,
       montant: montant ?? this.montant,
       benefice: benefice ?? this.benefice,
@@ -91,6 +97,7 @@ class Depots {
     result.addAll({'uid': uid});
     result.addAll({'user_uid': user_uid});
     result.addAll({'client_uid': client_uid});
+    result.addAll({'client_nom': client_nom});
     result.addAll({'credit_uid': credit_uid});
     result.addAll({'montant': montant});
     result.addAll({'benefice': benefice});
@@ -110,6 +117,7 @@ class Depots {
       uid: map['uid'] ?? '',
       user_uid: map['user_uid'] ?? '',
       client_uid: map['client_uid'] ?? '',
+      client_nom: map['client_nom'] ?? '',
       credit_uid: map['credit_uid'] ?? '',
       montant: map['montant']?.toInt() ?? 0,
       benefice: map['benefice']?.toDouble() ?? 0.0,
@@ -129,7 +137,7 @@ class Depots {
 
   @override
   String toString() {
-    return 'Depots(uid: $uid, user_uid: $user_uid, client_uid: $client_uid, credit_uid: $credit_uid, montant: $montant, benefice: $benefice, created_at: $created_at, created_at_heure: $created_at_heure, updated_at: $updated_at, updated_at_heure: $updated_at_heure, paye: $paye, credit_nom: $credit_nom, numero_depot: $numero_depot)';
+    return 'Depots(uid: $uid, user_uid: $user_uid, client_uid: $client_uid, client_nom: $client_nom, credit_uid: $credit_uid, montant: $montant, benefice: $benefice, created_at: $created_at, created_at_heure: $created_at_heure, updated_at: $updated_at, updated_at_heure: $updated_at_heure, paye: $paye, credit_nom: $credit_nom, numero_depot: $numero_depot)';
   }
 
   @override
@@ -140,6 +148,7 @@ class Depots {
         other.uid == uid &&
         other.user_uid == user_uid &&
         other.client_uid == client_uid &&
+        other.client_nom == client_nom &&
         other.credit_uid == credit_uid &&
         other.montant == montant &&
         other.benefice == benefice &&
@@ -157,6 +166,7 @@ class Depots {
     return uid.hashCode ^
         user_uid.hashCode ^
         client_uid.hashCode ^
+        client_nom.hashCode ^
         credit_uid.hashCode ^
         montant.hashCode ^
         benefice.hashCode ^
