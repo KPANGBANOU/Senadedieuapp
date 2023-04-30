@@ -7,10 +7,16 @@ class ProviderVenteCredit with ChangeNotifier {
   int _montant = 0;
   bool _affiche = false;
   bool _payer = true;
+  bool _perte = false;
   String _numero_client = "";
   String _nom_client = "";
   String _numero = "";
   String _client = "";
+  String _description = "";
+
+  String get description {
+    return _description;
+  }
 
   String get client {
     return _client;
@@ -22,6 +28,10 @@ class ProviderVenteCredit with ChangeNotifier {
 
   bool get affiche {
     return _affiche;
+  }
+
+  bool get perte {
+    return _perte;
   }
 
   String get credit {
@@ -42,6 +52,16 @@ class ProviderVenteCredit with ChangeNotifier {
 
   bool get payer {
     return _payer;
+  }
+
+  void change_description(String? value) {
+    _description = value!;
+    notifyListeners();
+  }
+
+  void change_perte(bool? value) {
+    _perte = value!;
+    notifyListeners();
   }
 
   void change_client(String? value) {

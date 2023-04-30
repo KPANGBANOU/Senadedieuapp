@@ -1,12 +1,14 @@
-// ignore_for_file: prefer_interpolation_to_compose_strings, unused_local_variable, unnecessary_null_comparison
+// ignore_for_file: prefer_interpolation_to_compose_strings, unused_local_variable, unnecessary_null_comparison, use_build_context_synchronously
 
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server/gmail.dart';
 import 'package:senadedieu/base_de_donnees/registration.dart';
+import 'package:senadedieu/interface/facture_vente_credit.dart';
 import 'generate_code.dart';
 
 class Functions {
@@ -215,7 +217,10 @@ class Functions {
     }
   }
 
-  Future<String> DeleteCredit(String tranche_uid, String credit_uid) async {
+  Future<String> DeleteCredit(
+    String tranche_uid,
+    String credit_uid,
+  ) async {
     try {
       if (credit_uid.isEmpty || tranche_uid.isEmpty) {
         return "100"; // credit vide ou invalide
@@ -371,7 +376,62 @@ class Functions {
     }
   }
 
+  Future<String> ApprovisionnementCredit(
+      String tranche_uid, String nom, int montant, String user_uid) async {
+    try {
+      if (tranche_uid.isEmpty || nom.isEmpty || montant <= 0) {
+        return "100";
+      } else {
+        String credit_uid = "";
+        int montant_initial = 0;
+        int montant_initial_cumule = 0;
+        int montant_disponible = 0;
+        await FirebaseFirestore.instance
+            .collection("tranches")
+            .doc(tranche_uid)
+            .collection("credits")
+            .where("nom", isEqualTo: nom)
+            .get()
+            .then((value) {
+          final credit = value.docs.first;
+          credit_uid = credit.id;
+          montant_disponible = credit.data()['montant_disponible'];
+          montant_initial = credit.data()['montant_initial'];
+          montant_initial_cumule = credit.data()['montant_initial_cumule'];
+        });
+
+        await FirebaseFirestore.instance
+            .collection("tranches")
+            .doc(tranche_uid)
+            .collection("credits")
+            .doc(credit_uid)
+            .update({
+          "montant_initial": montant_initial + montant,
+          "montant_initial_cumule": montant_initial_cumule + montant,
+          "montant_disponible": montant_disponible + montant
+        });
+
+        await FirebaseFirestore.instance
+            .collection("tranches")
+            .doc(tranche_uid)
+            .collection("depot_marchants")
+            .add({
+          "created_at": DateTime.now(),
+          "user_uid": user_uid,
+          'credit_uid': credit_uid,
+          "credit_nom": nom,
+          "montant": montant
+        });
+
+        return "200";
+      }
+    } catch (e) {
+      return "202";
+    }
+  }
+
   Future<String> VenteCredit(
+      BuildContext dialodcontext,
       String tranche_uid,
       String nom_credit,
       String user_uid,
@@ -391,12 +451,13 @@ class Functions {
       double budget_tranche_benefice,
       int budget_tranche_perte) async {
     try {
-      if (tranche_uid.isEmpty ||
-          nom_credit.isEmpty ||
-          montant <= 0 ||
-          numero.isEmpty ||
-          numero_client.isEmpty ||
-          nom_client.isEmpty) {
+      if ((tranche_uid.isEmpty ||
+              nom_credit.isEmpty ||
+              montant <= 0 ||
+              numero.isEmpty ||
+              numero_client.isEmpty ||
+              nom_client.isEmpty) ||
+          (perte && description_perte!.isEmpty)) {
         return "100"; // données vides ou invalides
       } else {
         String credit_uid = "";
@@ -427,7 +488,7 @@ class Functions {
           if (perte) {
             // Si c'est une perte au cas ou il s'est trompé de numero
 
-            final String statut_code = AjouterPerte(
+            final String statut_code = await AjouterPerte(
                 tranche_uid,
                 user_uid,
                 description_perte!,
@@ -435,7 +496,7 @@ class Functions {
                 budget_uid,
                 budget_perte,
                 budget_tranche_uid,
-                budget_tranche_perte) as String;
+                budget_tranche_perte);
 
             if (statut_code == "200") {
               await FirebaseFirestore.instance // mise à jour de stock
@@ -675,6 +736,17 @@ class Functions {
                 "benefice": budget_tranche_benefice +
                     (montant * benefice_sur_5000) / 5000
               });
+
+              await Navigator.push(
+                  dialodcontext,
+                  MaterialPageRoute(
+                    builder: (context) => FactureVenteCredit(
+                        credit_nom: nom_credit,
+                        credit_montant_vendu: montant,
+                        credit_montant_restant: montant_disponible - montant,
+                        credit_uid: credit_uid,
+                        tranche_uid: tranche_uid),
+                  ));
 
               return "200";
             }

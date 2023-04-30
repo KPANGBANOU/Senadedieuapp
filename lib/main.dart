@@ -13,9 +13,11 @@ import 'package:senadedieu/provider/provider_ajouter_credit.dart';
 import 'package:senadedieu/provider/provider_ajouter_depense.dart';
 import 'package:senadedieu/provider/provider_ajouter_perte.dart';
 import 'package:senadedieu/provider/provider_ajouter_tranche.dart';
+import 'package:senadedieu/provider/provider_approvisionner_credit.dart';
 import 'package:senadedieu/provider/provider_change_index.dart';
 import 'package:senadedieu/provider/provider_connnexion.dart';
 import 'package:senadedieu/provider/provider_created_account.dart';
+import 'package:senadedieu/provider/provider_drawer_admin.dart';
 import 'package:senadedieu/provider/provider_gestion_depot.dart';
 import 'package:senadedieu/provider/provider_gestion_retrait.dart';
 import 'package:senadedieu/provider/provider_new_password.dart';
@@ -116,6 +118,12 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => Search(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ProviderDrawerAdmin(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ProviderApprovisionnerCredit(),
         ),
       ],
       child: MaterialApp(

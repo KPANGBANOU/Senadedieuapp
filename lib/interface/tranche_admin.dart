@@ -331,7 +331,7 @@ class TrancheAdmin extends StatelessWidget {
                         // ignore: prefer_const_literals_to_create_immutables
                         children: [
                           Text(
-                            "Autres fonctionnalités",
+                            "Autres options",
                             textAlign: TextAlign.center,
                             style: GoogleFonts.alike(
                                 color: Colors.white,
@@ -355,15 +355,17 @@ class TrancheAdmin extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           // ignore: prefer_const_literals_to_create_immutables
                           children: [
-                            Text(
-                              "Accéder aux vagues de cette ferme",
-                              style: GoogleFonts.alike(
-                                  color: Colors.lightBlue.shade900,
-                                  fontWeight: FontWeight.bold),
+                            Expanded(
+                              child: Text(
+                                "Historique des ventes de crédits",
+                                style: GoogleFonts.alike(
+                                    color: Colors.lightBlue.shade900,
+                                    fontWeight: FontWeight.bold),
+                              ),
                             ),
                             Icon(
-                              Icons.arrow_right,
-                              color: Colors.lightBlue.shade900,
+                              Icons.arrow_right_alt,
+                              color: Colors.black,
                             )
                           ],
                         )),
@@ -385,15 +387,177 @@ class TrancheAdmin extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           // ignore: prefer_const_literals_to_create_immutables
                           children: [
-                            Text(
-                              "Ajouter une nouvelle vague à cette ferme",
-                              style: GoogleFonts.alike(
-                                  color: Colors.lightBlue.shade900,
-                                  fontWeight: FontWeight.bold),
+                            Expanded(
+                              child: Text(
+                                "Historique des ventes à crédits",
+                                style: GoogleFonts.alike(
+                                    color: Colors.lightBlue.shade900,
+                                    fontWeight: FontWeight.bold),
+                              ),
                             ),
                             Icon(
-                              Icons.arrow_right,
-                              color: Colors.lightBlue.shade900,
+                              Icons.arrow_right_alt,
+                              color: Colors.black,
+                            )
+                          ],
+                        )),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 25),
+                    child: Container(
+                      height: 1,
+                      width: double.infinity,
+                      color: Colors.black12,
+                    ),
+                  ),
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(left: 20, right: 15, bottom: 10),
+                    child: TextButton(
+                        onPressed: () {},
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          // ignore: prefer_const_literals_to_create_immutables
+                          children: [
+                            Expanded(
+                              child: Text(
+                                "Historique des ventes à crédits non payées",
+                                style: GoogleFonts.alike(
+                                    color: Colors.lightBlue.shade900,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            Icon(
+                              Icons.arrow_right_alt,
+                              color: Colors.black,
+                            )
+                          ],
+                        )),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 25),
+                    child: Container(
+                      height: 1,
+                      width: double.infinity,
+                      color: Colors.black12,
+                    ),
+                  ),
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(left: 20, right: 15, bottom: 10),
+                    child: TextButton(
+                        onPressed: () {},
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          // ignore: prefer_const_literals_to_create_immutables
+                          children: [
+                            Expanded(
+                              child: Text(
+                                "Rubrique des ventes à crédits payées",
+                                style: GoogleFonts.alike(
+                                    color: Colors.lightBlue.shade900,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            Icon(
+                              Icons.arrow_right_alt,
+                              color: Colors.black,
+                            )
+                          ],
+                        )),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 25),
+                    child: Container(
+                      height: 1,
+                      width: double.infinity,
+                      color: Colors.black12,
+                    ),
+                  ),
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(left: 20, right: 15, bottom: 10),
+                    child: TextButton(
+                        onPressed: () {},
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          // ignore: prefer_const_literals_to_create_immutables
+                          children: [
+                            Expanded(
+                              child: Text(
+                                "Inventaires des dépots éffectués",
+                                style: GoogleFonts.alike(
+                                    color: Colors.lightBlue.shade900,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            Icon(
+                              Icons.arrow_right_alt,
+                              color: Colors.black,
+                            )
+                          ],
+                        )),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 25),
+                    child: Container(
+                      height: 1,
+                      width: double.infinity,
+                      color: Colors.black12,
+                    ),
+                  ),
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(left: 20, right: 15, bottom: 10),
+                    child: TextButton(
+                        onPressed: () {},
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          // ignore: prefer_const_literals_to_create_immutables
+                          children: [
+                            Expanded(
+                              child: Text(
+                                "Inventaire des dépots marchants",
+                                style: GoogleFonts.alike(
+                                    color: Colors.lightBlue.shade900,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            Icon(
+                              Icons.arrow_right_alt,
+                              color: Colors.black,
+                            )
+                          ],
+                        )),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 25),
+                    child: Container(
+                      height: 1,
+                      width: double.infinity,
+                      color: Colors.black12,
+                    ),
+                  ),
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(left: 20, right: 15, bottom: 10),
+                    child: TextButton(
+                        onPressed: () {},
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          // ignore: prefer_const_literals_to_create_immutables
+                          children: [
+                            Expanded(
+                              child: Text(
+                                "Historique des dépots éffectués non payés",
+                                style: GoogleFonts.alike(
+                                    color: Colors.lightBlue.shade900,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            Icon(
+                              Icons.arrow_right_alt,
+                              color: Colors.black,
                             )
                           ],
                         )),

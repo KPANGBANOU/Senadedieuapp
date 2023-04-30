@@ -55,4 +55,9 @@ class ProviderAjouterCredit with ChangeNotifier {
     _montant_initial = value!.isEmpty ? 0 : int.parse(value);
     notifyListeners();
   }
+
+  void change_seuil_approvisionnement(String? value) {
+    _seuil_approvisionnement = value!.isEmpty ? 0 : int.parse(value);
+    notifyListeners();
+  }
 }

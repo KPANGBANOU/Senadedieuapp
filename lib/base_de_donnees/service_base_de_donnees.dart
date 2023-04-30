@@ -8,6 +8,7 @@ import 'package:senadedieu/models/client.dart';
 import 'package:senadedieu/models/credits.dart';
 import 'package:senadedieu/models/depense.dart';
 import 'package:senadedieu/models/depot.dart';
+import 'package:senadedieu/models/depot_marchant.dart';
 import 'package:senadedieu/models/pertes.dart';
 import 'package:senadedieu/models/retrait.dart';
 import 'package:senadedieu/models/tranches.dart';
@@ -25,6 +26,27 @@ class ServiceDB {
         .doc(user_uid)
         .snapshots()
         .map((snap) => donnesUtilisateur.fromFiresotre(snap));
+  }
+
+  Stream<List<DepotMarchants>> depots_marchants(String tranche_uid) {
+    return _ref
+        .collection("tranches")
+        .doc(tranche_uid)
+        .collection("depot_marchants")
+        .orderBy("created_at", descending: true)
+        .snapshots()
+        .map((event) =>
+            event.docs.map((e) => DepotMarchants.FromFirestore(e)).toList());
+  }
+
+  Stream<DepotMarchants> depot_marchant(String tranche_uid, String depot_uid) {
+    return _ref
+        .collection("tranches")
+        .doc(tranche_uid)
+        .collection("depot_marchants")
+        .doc(depot_uid)
+        .snapshots()
+        .map((event) => DepotMarchants.FromFirestore(event));
   }
 
   Stream<donnesUtilisateur> get currentuserdata {
