@@ -36,7 +36,7 @@ class Retraits {
     return Retraits(
       client_nom: (document.data() as Map)['client_nom'],
       numero_retrait: (document.data() as Map)['numero_retrait'],
-      credit_nom: (document.data() as Map)['credit_non'],
+      credit_nom: (document.data() as Map)['credit_nom'],
       uid: document.id,
       user_uid: (document.data() as Map)['user_uid'],
       client_uid: (document.data() as Map)['client_uid'],

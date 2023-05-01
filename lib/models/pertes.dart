@@ -11,6 +11,7 @@ class Pertes {
   String created_at;
   String created_at_heure;
   String description;
+  final String credit_uid;
   int montant;
   Pertes({
     required this.uid,
@@ -18,12 +19,14 @@ class Pertes {
     required this.created_at,
     required this.created_at_heure,
     required this.description,
+    required this.credit_uid,
     required this.montant,
   });
 
   factory Pertes.FromFirestore(DocumentSnapshot document) {
     Timestamp created = (document.data() as Map)['created_at'];
     return Pertes(
+        credit_uid: (document.data() as Map)['credit_uid'],
         uid: document.id,
         user_uid: (document.data() as Map<String, dynamic>)['user_uid'],
         created_at: DateFormat("dd-MM-yyyy").format(created.toDate()),
@@ -38,6 +41,7 @@ class Pertes {
     String? created_at,
     String? created_at_heure,
     String? description,
+    String? credit_uid,
     int? montant,
   }) {
     return Pertes(
@@ -46,6 +50,7 @@ class Pertes {
       created_at: created_at ?? this.created_at,
       created_at_heure: created_at_heure ?? this.created_at_heure,
       description: description ?? this.description,
+      credit_uid: credit_uid ?? this.credit_uid,
       montant: montant ?? this.montant,
     );
   }
@@ -58,6 +63,7 @@ class Pertes {
     result.addAll({'created_at': created_at});
     result.addAll({'created_at_heure': created_at_heure});
     result.addAll({'description': description});
+    result.addAll({'credit_uid': credit_uid});
     result.addAll({'montant': montant});
 
     return result;
@@ -70,6 +76,7 @@ class Pertes {
       created_at: map['created_at'] ?? '',
       created_at_heure: map['created_at_heure'] ?? '',
       description: map['description'] ?? '',
+      credit_uid: map['credit_uid'] ?? '',
       montant: map['montant']?.toInt() ?? 0,
     );
   }
@@ -80,7 +87,7 @@ class Pertes {
 
   @override
   String toString() {
-    return 'Pertes(uid: $uid, user_uid: $user_uid, created_at: $created_at, created_at_heure: $created_at_heure, description: $description, montant: $montant)';
+    return 'Pertes(uid: $uid, user_uid: $user_uid, created_at: $created_at, created_at_heure: $created_at_heure, description: $description, credit_uid: $credit_uid, montant: $montant)';
   }
 
   @override
@@ -93,6 +100,7 @@ class Pertes {
         other.created_at == created_at &&
         other.created_at_heure == created_at_heure &&
         other.description == description &&
+        other.credit_uid == credit_uid &&
         other.montant == montant;
   }
 
@@ -103,6 +111,7 @@ class Pertes {
         created_at.hashCode ^
         created_at_heure.hashCode ^
         description.hashCode ^
+        credit_uid.hashCode ^
         montant.hashCode;
   }
 }
