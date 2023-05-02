@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server/gmail.dart';
 import 'package:senadedieu/base_de_donnees/registration.dart';
+import 'package:senadedieu/interface/facture_depot.dart';
+import 'package:senadedieu/interface/facture_retrait.dart';
 import 'package:senadedieu/interface/facture_vente_credit.dart';
 import 'package:senadedieu/interface/stream_tranche_list_pertes.dart';
 import 'package:senadedieu/interface/stream_tranche_ventes_a_credits_non_payes.dart';
@@ -672,6 +674,7 @@ class Functions {
                   final client = value.docs.first;
                   client_uid = client.id;
                   total_achat = client.data()['total_achat'];
+                  total_non_paye = client.data()['total_non_paye'];
                 });
 
                 await FirebaseFirestore.instance
@@ -682,7 +685,6 @@ class Functions {
                     .update({
                   "derniere_achat": DateTime.now(),
                   "total_achat": total_achat + montant,
-                  "total_non_paye": 0
                 });
               }
 
@@ -752,6 +754,12 @@ class Functions {
                   dialodcontext,
                   MaterialPageRoute(
                     builder: (context) => FactureVenteCredit(
+                        nom_client: nom_client,
+                        numero: numero,
+                        numero_client: numero_client,
+                        total_achat_client:
+                            is_empty_client ? montant : total_achat + montant,
+                        total_non_paye: is_empty_client ? 0 : total_non_paye,
                         credit_nom: nom_credit,
                         credit_montant_vendu: montant,
                         credit_montant_restant: montant_disponible - montant,
@@ -1500,7 +1508,7 @@ class Functions {
     }
   }
 
-  Future<String> UpfateDepense(
+  Future<String> UpdateDepense(
       String transe_uid,
       String depense_uid,
       int depense_montant,
@@ -1561,7 +1569,7 @@ class Functions {
     }
   }
 
-  Future<String> UpfatePerte(
+  Future<String> UpdatePerte(
       String transe_uid,
       String perte_uid,
       int perte_montant,
@@ -1917,6 +1925,7 @@ class Functions {
   }
 
   Future<String> FaireDepot(
+    BuildContext context,
     String tranche_uid,
     String user_uid,
     String credit_nom,
@@ -1926,8 +1935,10 @@ class Functions {
     String numero,
     String numero_client,
     String budget_uid,
+    int budget_solde_total,
     double budget_benefice,
     String budget_tranche_uid,
+    int budget_tranche_solde_total,
     double budget_tranche_benefice,
   ) async {
     try {
@@ -2059,6 +2070,8 @@ class Functions {
               .collection("budget")
               .doc(budget_uid)
               .update({
+            "solde_total":
+                !payer ? budget_solde_total : budget_solde_total + montant,
             "benefice": payer ? benefice + (montant * 50) / 15500 : benefice
           });
 
@@ -2068,6 +2081,9 @@ class Functions {
               .collection("budget")
               .doc(budget_tranche_uid)
               .update({
+            "solde_total": !payer
+                ? budget_tranche_solde_total
+                : budget_tranche_solde_total + montant,
             "benefice": payer
                 ? budget_tranche_benefice + (montant * 50) / 15500
                 : budget_tranche_benefice
@@ -2091,11 +2107,34 @@ class Functions {
             "updated_at": DateTime.now()
           });
 
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => FactureDepot(
+                    credit_nom: credit_nom,
+                    credit_montant_vendu: montant,
+                    credit_montant_restant: montant_disponible - montant,
+                    credit_uid: credit_uid,
+                    tranche_uid: tranche_uid,
+                    numero_client: numero_client,
+                    nom_client: client_nom,
+                    numero: numero,
+                    total_depot_client:
+                        is_empty ? montant : total_depot + montant,
+                    total_non_paye: payer
+                        ? is_empty
+                            ? 0
+                            : total_depot_non_paye
+                        : is_empty
+                            ? total_depot_non_paye
+                            : total_depot + montant),
+              ));
+
           return "200";
         }
       }
     } catch (e) {
-      return "202";
+      return e.toString();
     }
   }
 
@@ -2108,7 +2147,9 @@ class Functions {
       int depot_montant,
       int client_total_depot_non_paye,
       String budget_uid,
+      int budget_solde_total,
       String budget_tranche_uid,
+      int budget_tranche_solde_total,
       double budget_benefice,
       double budget_tranche_benefice) async {
     try {
@@ -2127,12 +2168,18 @@ class Functions {
             .doc(tranche_uid)
             .collection("budget")
             .doc(budget_tranche_uid)
-            .update({"benefice": budget_tranche_benefice + depot_benefice});
+            .update({
+          "benefice": budget_tranche_benefice + depot_benefice,
+          "solde_total": budget_tranche_solde_total + depot_montant
+        });
 
         await FirebaseFirestore.instance
             .collection("budgetb")
             .doc(budget_uid)
-            .update({"benefice": budget_benefice + depot_benefice});
+            .update({
+          "benefice": budget_benefice + depot_benefice,
+          "solde_total": budget_solde_total + depot_montant
+        });
 
         await FirebaseFirestore.instance
             .collection("tranches")
@@ -2318,6 +2365,7 @@ class Functions {
   }
 
   Future<String> FaireRetrait(
+      BuildContext context,
       String tranche_uid,
       String user_uid,
       String budget_uid,
@@ -2329,14 +2377,18 @@ class Functions {
       String client_nom,
       String numero_client,
       String numero,
-      double benefice) async {
+      int benefice) async {
     try {
       if (tranche_uid.isEmpty ||
           Credit_nom.isEmpty ||
           montant <= 0 ||
           client_nom.isEmpty ||
           numero.isEmpty ||
-          numero_client.isEmpty) {
+          numero_client.isEmpty ||
+          benefice <= 0 ||
+          budget_uid.isEmpty ||
+          budget_tranche_uid.isEmpty) {
+        // données invalides
         return "100";
       } else {
         int total_retrait = 0;
@@ -2458,6 +2510,22 @@ class Functions {
           "credit_nom": Credit_nom,
           "numero_retrait": numero
         });
+
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => FactureRetrait(
+                  credit_nom: Credit_nom,
+                  credit_montant_retire: montant,
+                  credit_montant_restant: montant_disponible + montant,
+                  credit_uid: credit_uid,
+                  tranche_uid: tranche_uid,
+                  numero_client: numero_client,
+                  nom_client: client_nom,
+                  numero_retrait: numero,
+                  total_retrait: is_empty ? montant : total_retrait + montant,
+                  benefice: benefice),
+            ));
 
         return "200";
       }

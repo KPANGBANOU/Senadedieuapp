@@ -6,31 +6,31 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:senadedieu/interface/drawer_admin.dart';
 
-class FactureVenteCredit extends StatelessWidget {
-  FactureVenteCredit({
+class FactureRetrait extends StatelessWidget {
+  FactureRetrait({
     Key? key,
     required this.credit_nom,
-    required this.credit_montant_vendu,
+    required this.credit_montant_retire,
     required this.credit_montant_restant,
     required this.credit_uid,
     required this.tranche_uid,
     required this.numero_client,
     required this.nom_client,
-    required this.numero,
-    required this.total_achat_client,
-    required this.total_non_paye,
+    required this.numero_retrait,
+    required this.total_retrait,
+    required this.benefice,
   }) : super(key: key);
 
   final String credit_nom;
-  final int credit_montant_vendu;
+  final int credit_montant_retire;
   final int credit_montant_restant;
   final String credit_uid;
   final String tranche_uid;
   final String numero_client;
   final String nom_client;
-  final String numero;
-  final int total_achat_client;
-  final int total_non_paye;
+  final String numero_retrait;
+  final int total_retrait;
+  final int benefice;
   @override
   Widget build(BuildContext context) {
     Timestamp time = Timestamp.now();
@@ -107,7 +107,7 @@ class FactureVenteCredit extends StatelessWidget {
               height: 40,
             ),
             Text(
-              "Facture de vente de crédit",
+              "Facture de retrait",
               textAlign: TextAlign.center,
               style: GoogleFonts.alike(
                   color: Colors.white,
@@ -138,7 +138,7 @@ class FactureVenteCredit extends StatelessWidget {
                               backgroundColor: Colors.lightBlue.shade900),
                           onPressed: () {},
                           child: Text(
-                            "Informations sur la vente".toUpperCase(),
+                            "Informations sur le retrait".toUpperCase(),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.center,
@@ -168,7 +168,6 @@ class FactureVenteCredit extends StatelessWidget {
                           Expanded(
                             child: Text(
                               credit_nom,
-                              maxLines: 2,
                               softWrap: true,
                               textAlign: TextAlign.justify,
                               style: GoogleFonts.alike(
@@ -186,7 +185,7 @@ class FactureVenteCredit extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Montant vendu",
+                            "Montant rétiré",
                             style: GoogleFonts.alike(
                                 color: Colors.lightBlue.shade800,
                                 fontWeight: FontWeight.bold),
@@ -196,8 +195,7 @@ class FactureVenteCredit extends StatelessWidget {
                           ),
                           Expanded(
                             child: Text(
-                              credit_montant_vendu.toString() + " XOF",
-                              maxLines: 2,
+                              credit_montant_retire.toString() + " XOF",
                               softWrap: true,
                               textAlign: TextAlign.justify,
                               style: GoogleFonts.alike(
@@ -215,7 +213,7 @@ class FactureVenteCredit extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Montant restant:",
+                            "Nouveau solde :",
                             style: GoogleFonts.alike(
                                 color: Colors.lightBlue.shade800,
                                 fontWeight: FontWeight.bold),
@@ -226,7 +224,34 @@ class FactureVenteCredit extends StatelessWidget {
                           Expanded(
                             child: Text(
                               credit_montant_restant.toString() + " XOF",
-                              maxLines: 2,
+                              softWrap: true,
+                              textAlign: TextAlign.justify,
+                              style: GoogleFonts.alike(
+                                  color: Colors.lightBlue.shade800,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: 10, right: 10, bottom: 15),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Bénéfice réalisé sur le retrait :",
+                            style: GoogleFonts.alike(
+                                color: Colors.lightBlue.shade800,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(
+                            width: 14,
+                          ),
+                          Expanded(
+                            child: Text(
+                              benefice.toString() + " XOF",
                               softWrap: true,
                               textAlign: TextAlign.justify,
                               style: GoogleFonts.alike(
@@ -300,7 +325,7 @@ class FactureVenteCredit extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Numéro ayant reçu le crédit:",
+                            "Numéro de retrait:",
                             style: GoogleFonts.alike(
                                 color: Colors.lightBlue.shade800,
                                 fontWeight: FontWeight.bold),
@@ -310,7 +335,35 @@ class FactureVenteCredit extends StatelessWidget {
                           ),
                           Expanded(
                             child: Text(
-                              numero,
+                              numero_retrait,
+                              softWrap: true,
+                              textAlign: TextAlign.justify,
+                              style: GoogleFonts.alike(
+                                  color: Colors.lightBlue.shade800,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: 10, right: 10, bottom: 15),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Total de retrait du client:",
+                            style: GoogleFonts.alike(
+                                color: Colors.lightBlue.shade800,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(
+                            width: 14,
+                          ),
+                          Expanded(
+                            child: Text(
+                              total_retrait.toString() + " XOF",
                               maxLines: 2,
                               softWrap: true,
                               textAlign: TextAlign.justify,
@@ -329,64 +382,7 @@ class FactureVenteCredit extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Total d'achat du client:",
-                            style: GoogleFonts.alike(
-                                color: Colors.lightBlue.shade800,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(
-                            width: 14,
-                          ),
-                          Expanded(
-                            child: Text(
-                              total_achat_client.toString() + " XOF",
-                              maxLines: 2,
-                              softWrap: true,
-                              textAlign: TextAlign.justify,
-                              style: GoogleFonts.alike(
-                                  color: Colors.lightBlue.shade800,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 10, right: 10, bottom: 15),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Total non payé :",
-                            style: GoogleFonts.alike(
-                                color: Colors.lightBlue.shade800,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(
-                            width: 14,
-                          ),
-                          Expanded(
-                            child: Text(
-                              total_non_paye.toString() + " XOF",
-                              softWrap: true,
-                              textAlign: TextAlign.justify,
-                              style: GoogleFonts.alike(
-                                  color: Colors.lightBlue.shade800,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 10, right: 10, bottom: 15),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Date de vente :",
+                            "Date de retrait :",
                             style: GoogleFonts.alike(
                                 color: Colors.lightBlue.shade800,
                                 fontWeight: FontWeight.bold),

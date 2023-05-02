@@ -6,7 +6,10 @@ import 'package:provider/provider.dart';
 import 'package:senadedieu/interface/accueil_admin.dart';
 import 'package:senadedieu/interface/login.dart';
 import 'package:senadedieu/interface/stream_tranche_approvisionner_credit.dart';
+import 'package:senadedieu/interface/stream_tranche_faire_depot.dart';
+import 'package:senadedieu/interface/stream_tranche_faire_retrait.dart';
 import 'package:senadedieu/interface/stream_tranche_liquidite_credits.dart';
+import 'package:senadedieu/interface/stream_tranche_list_client.dart';
 import 'package:senadedieu/interface/stream_tranche_list_credit.dart';
 import 'package:senadedieu/interface/stream_tranche_vente_credits.dart';
 import 'package:senadedieu/models/user.dart';
@@ -31,6 +34,7 @@ class DrawerAdmin extends StatelessWidget {
     bool list_credits = provider.list_credits;
     bool list_depenses = provider.list_depenses;
     bool list_pertes = provider.list_pertes;
+    bool retrait = provider.retrait;
     return Padding(
       padding: const EdgeInsets.only(top: 90),
       child: Drawer(
@@ -80,7 +84,7 @@ class DrawerAdmin extends StatelessWidget {
             ),
             ListTile(
               textColor: home ? Colors.white : Colors.black,
-              tileColor: home ? Colors.redAccent.withOpacity(.7) : null,
+              tileColor: home ? Colors.lightBlue.shade800 : null,
               title: Text(
                 "Home",
                 style: GoogleFonts.alike(fontWeight: FontWeight.bold),
@@ -96,7 +100,7 @@ class DrawerAdmin extends StatelessWidget {
             ),
             ListTile(
               textColor: liquidite ? Colors.white : Colors.black,
-              tileColor: liquidite ? Colors.redAccent.withOpacity(.7) : null,
+              tileColor: liquidite ? Colors.lightBlue.shade800 : null,
               title: Text(
                 "Liquidité de crédits",
                 style: GoogleFonts.alike(fontWeight: FontWeight.bold),
@@ -113,8 +117,7 @@ class DrawerAdmin extends StatelessWidget {
             ),
             ListTile(
               textColor: vente_credits ? Colors.white : Colors.black,
-              tileColor:
-                  vente_credits ? Colors.redAccent.withOpacity(.7) : null,
+              tileColor: vente_credits ? Colors.lightBlue.shade800 : null,
               title: Text(
                 "Vente de crédits",
                 style: GoogleFonts.alike(fontWeight: FontWeight.bold),
@@ -131,26 +134,26 @@ class DrawerAdmin extends StatelessWidget {
             ),
             ListTile(
               textColor: depot ? Colors.white : Colors.black,
-              tileColor: depot ? Colors.redAccent.withOpacity(.7) : null,
+              tileColor: depot ? Colors.lightBlue.shade800 : null,
               title: Text(
                 "Faire de dépot",
                 style: GoogleFonts.alike(fontWeight: FontWeight.bold),
               ),
               onTap: () {
                 provider.put_depot();
-                /* Navigator.push(
+                Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => AccueilAdmin(),
-                    ));*/
+                      builder: (context) =>
+                          StreamTrancheFaireDepot(tranche_uid: tranche_uid),
+                    ));
               },
             ),
             ListTile(
               textColor: recharger_stock ? Colors.white : Colors.black,
-              tileColor:
-                  recharger_stock ? Colors.redAccent.withOpacity(.7) : null,
+              tileColor: recharger_stock ? Colors.lightBlue.shade800 : null,
               title: Text(
-                "Réchargement de stock des crédits",
+                "Faire de dépot marchants",
                 style: GoogleFonts.alike(fontWeight: FontWeight.bold),
               ),
               onTap: () {
@@ -165,8 +168,25 @@ class DrawerAdmin extends StatelessWidget {
               },
             ),
             ListTile(
+              textColor: retrait ? Colors.white : Colors.black,
+              tileColor: retrait ? Colors.lightBlue.shade800 : null,
+              title: Text(
+                "Faire de retrait",
+                style: GoogleFonts.alike(fontWeight: FontWeight.bold),
+              ),
+              onTap: () {
+                provider.put_retrait();
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          StreamTrancheFaireRetrait(tranche_uid: tranche_uid),
+                    ));
+              },
+            ),
+            ListTile(
               textColor: list_credits ? Colors.white : Colors.black,
-              tileColor: list_credits ? Colors.redAccent.withOpacity(.7) : null,
+              tileColor: list_credits ? Colors.lightBlue.shade800 : null,
               title: Text(
                 "Liste des crédits",
                 style: GoogleFonts.alike(fontWeight: FontWeight.bold),
@@ -183,24 +203,24 @@ class DrawerAdmin extends StatelessWidget {
             ),
             ListTile(
               textColor: list_clients ? Colors.white : Colors.black,
-              tileColor: list_clients ? Colors.redAccent.withOpacity(.7) : null,
+              tileColor: list_clients ? Colors.lightBlue.shade800 : null,
               title: Text(
                 "Clients de l'entreprise",
                 style: GoogleFonts.alike(fontWeight: FontWeight.bold),
               ),
               onTap: () {
                 provider.put_list_clients();
-                /* Navigator.push(
+                Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => AccueilAdmin(),
-                    ));*/
+                      builder: (context) =>
+                          StreamTrancheListClient(tranche_uid: tranche_uid),
+                    ));
               },
             ),
             ListTile(
               textColor: list_depenses ? Colors.white : Colors.black,
-              tileColor:
-                  list_depenses ? Colors.redAccent.withOpacity(.7) : null,
+              tileColor: list_depenses ? Colors.lightBlue.shade800 : null,
               title: Text(
                 "Dépenses éffectuées",
                 style: GoogleFonts.alike(fontWeight: FontWeight.bold),
@@ -216,7 +236,7 @@ class DrawerAdmin extends StatelessWidget {
             ),
             ListTile(
               textColor: list_pertes ? Colors.white : Colors.black,
-              tileColor: list_pertes ? Colors.redAccent.withOpacity(.7) : null,
+              tileColor: list_pertes ? Colors.lightBlue.shade800 : null,
               title: Text(
                 "Pertes réalisées",
                 style: GoogleFonts.alike(fontWeight: FontWeight.bold),

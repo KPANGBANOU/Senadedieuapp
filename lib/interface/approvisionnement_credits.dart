@@ -264,7 +264,8 @@ class ApprovisionnerListCredits extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 20),
-                  child: Expanded(
+                  child: SizedBox(
+                    width: double.infinity,
                     child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.brown.shade900),

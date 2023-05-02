@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:senadedieu/base_de_donnees/service_base_de_donnees.dart';
+import 'package:senadedieu/interface/list_clients.dart';
 import 'package:senadedieu/models/client.dart';
 
 class StreamTrancheListClient extends StatelessWidget {
@@ -10,11 +11,14 @@ class StreamTrancheListClient extends StatelessWidget {
   final String tranche_uid;
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(providers: [
-      Provider(create: (_) => ServiceDB()),
-      StreamProvider(
-          create: (context) => context.read<ServiceDB>().clients(tranche_uid),
-          initialData: <Clients>[])
-    ]);
+    return MultiProvider(
+      providers: [
+        Provider(create: (_) => ServiceDB()),
+        StreamProvider(
+            create: (context) => context.read<ServiceDB>().clients(tranche_uid),
+            initialData: <Clients>[])
+      ],
+      child: ListClients(tranche_uid: tranche_uid),
+    );
   }
 }

@@ -8,6 +8,11 @@ class ProviderGestionRetrait with ChangeNotifier {
   String _numero_client = "";
   String _client = "";
   String _numero_retrait = "";
+  int _benefice = 0;
+
+  int get benefice {
+    return _benefice;
+  }
 
   bool get affiche {
     return _affiche;
@@ -31,6 +36,11 @@ class ProviderGestionRetrait with ChangeNotifier {
 
   String get numero_retrait {
     return _numero_retrait;
+  }
+
+  void change_benefice(String? value) {
+    _benefice = value!.isEmpty ? 0 : int.parse(value);
+    notifyListeners();
   }
 
   void affiche_false() {

@@ -6,8 +6,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:senadedieu/interface/drawer_admin.dart';
 
-class FactureVenteCredit extends StatelessWidget {
-  FactureVenteCredit({
+class FactureDepot extends StatelessWidget {
+  FactureDepot({
     Key? key,
     required this.credit_nom,
     required this.credit_montant_vendu,
@@ -17,7 +17,7 @@ class FactureVenteCredit extends StatelessWidget {
     required this.numero_client,
     required this.nom_client,
     required this.numero,
-    required this.total_achat_client,
+    required this.total_depot_client,
     required this.total_non_paye,
   }) : super(key: key);
 
@@ -29,7 +29,7 @@ class FactureVenteCredit extends StatelessWidget {
   final String numero_client;
   final String nom_client;
   final String numero;
-  final int total_achat_client;
+  final int total_depot_client;
   final int total_non_paye;
   @override
   Widget build(BuildContext context) {
@@ -107,7 +107,7 @@ class FactureVenteCredit extends StatelessWidget {
               height: 40,
             ),
             Text(
-              "Facture de vente de crédit",
+              "Facture de dépot",
               textAlign: TextAlign.center,
               style: GoogleFonts.alike(
                   color: Colors.white,
@@ -138,7 +138,7 @@ class FactureVenteCredit extends StatelessWidget {
                               backgroundColor: Colors.lightBlue.shade900),
                           onPressed: () {},
                           child: Text(
-                            "Informations sur la vente".toUpperCase(),
+                            "Informations sur le dépot".toUpperCase(),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.center,
@@ -168,7 +168,6 @@ class FactureVenteCredit extends StatelessWidget {
                           Expanded(
                             child: Text(
                               credit_nom,
-                              maxLines: 2,
                               softWrap: true,
                               textAlign: TextAlign.justify,
                               style: GoogleFonts.alike(
@@ -186,7 +185,7 @@ class FactureVenteCredit extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Montant vendu",
+                            "Montant du dépot",
                             style: GoogleFonts.alike(
                                 color: Colors.lightBlue.shade800,
                                 fontWeight: FontWeight.bold),
@@ -197,7 +196,6 @@ class FactureVenteCredit extends StatelessWidget {
                           Expanded(
                             child: Text(
                               credit_montant_vendu.toString() + " XOF",
-                              maxLines: 2,
                               softWrap: true,
                               textAlign: TextAlign.justify,
                               style: GoogleFonts.alike(
@@ -215,7 +213,7 @@ class FactureVenteCredit extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Montant restant:",
+                            "Montant restant :",
                             style: GoogleFonts.alike(
                                 color: Colors.lightBlue.shade800,
                                 fontWeight: FontWeight.bold),
@@ -226,7 +224,6 @@ class FactureVenteCredit extends StatelessWidget {
                           Expanded(
                             child: Text(
                               credit_montant_restant.toString() + " XOF",
-                              maxLines: 2,
                               softWrap: true,
                               textAlign: TextAlign.justify,
                               style: GoogleFonts.alike(
@@ -300,7 +297,7 @@ class FactureVenteCredit extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Numéro ayant reçu le crédit:",
+                            "Numéro de dépot:",
                             style: GoogleFonts.alike(
                                 color: Colors.lightBlue.shade800,
                                 fontWeight: FontWeight.bold),
@@ -311,7 +308,6 @@ class FactureVenteCredit extends StatelessWidget {
                           Expanded(
                             child: Text(
                               numero,
-                              maxLines: 2,
                               softWrap: true,
                               textAlign: TextAlign.justify,
                               style: GoogleFonts.alike(
@@ -329,7 +325,7 @@ class FactureVenteCredit extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Total d'achat du client:",
+                            "Total de dépott du client:",
                             style: GoogleFonts.alike(
                                 color: Colors.lightBlue.shade800,
                                 fontWeight: FontWeight.bold),
@@ -339,7 +335,7 @@ class FactureVenteCredit extends StatelessWidget {
                           ),
                           Expanded(
                             child: Text(
-                              total_achat_client.toString() + " XOF",
+                              total_depot_client.toString() + " XOF",
                               maxLines: 2,
                               softWrap: true,
                               textAlign: TextAlign.justify,
@@ -358,7 +354,7 @@ class FactureVenteCredit extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Total non payé :",
+                            "Total de deépot non payé :",
                             style: GoogleFonts.alike(
                                 color: Colors.lightBlue.shade800,
                                 fontWeight: FontWeight.bold),
@@ -386,7 +382,7 @@ class FactureVenteCredit extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Date de vente :",
+                            "Date de dépot :",
                             style: GoogleFonts.alike(
                                 color: Colors.lightBlue.shade800,
                                 fontWeight: FontWeight.bold),

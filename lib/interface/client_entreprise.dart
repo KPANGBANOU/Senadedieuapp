@@ -1,47 +1,28 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables, non_constant_identifier_names, prefer_interpolation_to_compose_strings, no_leading_underscores_for_local_identifiers, unused_local_variable
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:senadedieu/interface/drawer_admin.dart';
+import 'package:senadedieu/models/budget_tranches.dart';
+import 'package:senadedieu/models/client.dart';
 
-class FactureVenteCredit extends StatelessWidget {
-  FactureVenteCredit({
+class ClientEntreprise extends StatelessWidget {
+  ClientEntreprise({
     Key? key,
-    required this.credit_nom,
-    required this.credit_montant_vendu,
-    required this.credit_montant_restant,
-    required this.credit_uid,
     required this.tranche_uid,
-    required this.numero_client,
-    required this.nom_client,
-    required this.numero,
-    required this.total_achat_client,
-    required this.total_non_paye,
   }) : super(key: key);
-
-  final String credit_nom;
-  final int credit_montant_vendu;
-  final int credit_montant_restant;
-  final String credit_uid;
   final String tranche_uid;
-  final String numero_client;
-  final String nom_client;
-  final String numero;
-  final int total_achat_client;
-  final int total_non_paye;
   @override
   Widget build(BuildContext context) {
-    Timestamp time = Timestamp.now();
-    String created_at = DateFormat("dd-MM-yyyy").format(time.toDate());
-    String created_at_heure = DateFormat("HH:mm:ss").format(time.toDate());
-
+    final client = Provider.of<Clients>(context);
+    final budget_tranche = Provider.of<BudgetTranche>(context);
     return Scaffold(
       backgroundColor: Colors.lightBlue.shade900,
       drawer: DrawerAdmin(tranche_uid: tranche_uid),
       appBar: AppBar(
         actions: [
+          IconButton(onPressed: () {}, icon: Icon(Icons.send)),
           Image.asset(
             "images/logo.png",
             height: 60,
@@ -53,7 +34,7 @@ class FactureVenteCredit extends StatelessWidget {
         centerTitle: true,
         elevation: 0,
         title: Text(
-          "Facture",
+          "Client",
           style: GoogleFonts.alike(
               color: Colors.black, fontWeight: FontWeight.bold),
         ),
@@ -74,7 +55,7 @@ class FactureVenteCredit extends StatelessWidget {
                     padding:
                         const EdgeInsets.only(left: 20, bottom: 12, top: 25),
                     child: Text(
-                      "Entreprise Sèna De Dieu".toUpperCase(),
+                      "Client de Sèna De Dieu".toUpperCase(),
                       textAlign: TextAlign.left,
                       style: GoogleFonts.alike(
                           fontWeight: FontWeight.bold, color: Colors.white),
@@ -107,7 +88,7 @@ class FactureVenteCredit extends StatelessWidget {
               height: 40,
             ),
             Text(
-              "Facture de vente de crédit",
+              "Client de l'entreprise",
               textAlign: TextAlign.center,
               style: GoogleFonts.alike(
                   color: Colors.white,
@@ -138,7 +119,7 @@ class FactureVenteCredit extends StatelessWidget {
                               backgroundColor: Colors.lightBlue.shade900),
                           onPressed: () {},
                           child: Text(
-                            "Informations sur la vente".toUpperCase(),
+                            "Informations sur le client".toUpperCase(),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.center,
@@ -157,7 +138,7 @@ class FactureVenteCredit extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Réseau",
+                            "Client :",
                             style: GoogleFonts.alike(
                                 color: Colors.lightBlue.shade800,
                                 fontWeight: FontWeight.bold),
@@ -167,8 +148,7 @@ class FactureVenteCredit extends StatelessWidget {
                           ),
                           Expanded(
                             child: Text(
-                              credit_nom,
-                              maxLines: 2,
+                              client.nom,
                               softWrap: true,
                               textAlign: TextAlign.justify,
                               style: GoogleFonts.alike(
@@ -186,7 +166,7 @@ class FactureVenteCredit extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Montant vendu",
+                            "Numéro :",
                             style: GoogleFonts.alike(
                                 color: Colors.lightBlue.shade800,
                                 fontWeight: FontWeight.bold),
@@ -196,8 +176,7 @@ class FactureVenteCredit extends StatelessWidget {
                           ),
                           Expanded(
                             child: Text(
-                              credit_montant_vendu.toString() + " XOF",
-                              maxLines: 2,
+                              client.numero,
                               softWrap: true,
                               textAlign: TextAlign.justify,
                               style: GoogleFonts.alike(
@@ -215,7 +194,7 @@ class FactureVenteCredit extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Montant restant:",
+                            "Dernière transaction :",
                             style: GoogleFonts.alike(
                                 color: Colors.lightBlue.shade800,
                                 fontWeight: FontWeight.bold),
@@ -225,8 +204,7 @@ class FactureVenteCredit extends StatelessWidget {
                           ),
                           Expanded(
                             child: Text(
-                              credit_montant_restant.toString() + " XOF",
-                              maxLines: 2,
+                              client.dernier_achat,
                               softWrap: true,
                               textAlign: TextAlign.justify,
                               style: GoogleFonts.alike(
@@ -244,7 +222,7 @@ class FactureVenteCredit extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Nom du client :",
+                            "Montant total d'achat :",
                             style: GoogleFonts.alike(
                                 color: Colors.lightBlue.shade800,
                                 fontWeight: FontWeight.bold),
@@ -254,7 +232,7 @@ class FactureVenteCredit extends StatelessWidget {
                           ),
                           Expanded(
                             child: Text(
-                              nom_client,
+                              client.total_achat.toString() + " XOF",
                               softWrap: true,
                               textAlign: TextAlign.justify,
                               style: GoogleFonts.alike(
@@ -272,7 +250,7 @@ class FactureVenteCredit extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Numéro du client :",
+                            "Montant total d'achat non payé :",
                             style: GoogleFonts.alike(
                                 color: Colors.lightBlue.shade800,
                                 fontWeight: FontWeight.bold),
@@ -282,7 +260,7 @@ class FactureVenteCredit extends StatelessWidget {
                           ),
                           Expanded(
                             child: Text(
-                              numero_client,
+                              client.total_non_paye.toString() + " XOF",
                               softWrap: true,
                               textAlign: TextAlign.justify,
                               style: GoogleFonts.alike(
@@ -300,7 +278,7 @@ class FactureVenteCredit extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Numéro ayant reçu le crédit:",
+                            "Total de retrait éffectué :",
                             style: GoogleFonts.alike(
                                 color: Colors.lightBlue.shade800,
                                 fontWeight: FontWeight.bold),
@@ -310,8 +288,7 @@ class FactureVenteCredit extends StatelessWidget {
                           ),
                           Expanded(
                             child: Text(
-                              numero,
-                              maxLines: 2,
+                              client.total_retrait.toString() + " XOF",
                               softWrap: true,
                               textAlign: TextAlign.justify,
                               style: GoogleFonts.alike(
@@ -329,7 +306,7 @@ class FactureVenteCredit extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Total d'achat du client:",
+                            "Totaux des dépots éffectués :",
                             style: GoogleFonts.alike(
                                 color: Colors.lightBlue.shade800,
                                 fontWeight: FontWeight.bold),
@@ -339,8 +316,7 @@ class FactureVenteCredit extends StatelessWidget {
                           ),
                           Expanded(
                             child: Text(
-                              total_achat_client.toString() + " XOF",
-                              maxLines: 2,
+                              client.total_depot.toString() + " XOF",
                               softWrap: true,
                               textAlign: TextAlign.justify,
                               style: GoogleFonts.alike(
@@ -358,7 +334,7 @@ class FactureVenteCredit extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Total non payé :",
+                            "Total de dépot non payé :",
                             style: GoogleFonts.alike(
                                 color: Colors.lightBlue.shade800,
                                 fontWeight: FontWeight.bold),
@@ -368,7 +344,7 @@ class FactureVenteCredit extends StatelessWidget {
                           ),
                           Expanded(
                             child: Text(
-                              total_non_paye.toString() + " XOF",
+                              client.total_depot_non_paye.toString() + " XOF",
                               softWrap: true,
                               textAlign: TextAlign.justify,
                               style: GoogleFonts.alike(
@@ -379,33 +355,25 @@ class FactureVenteCredit extends StatelessWidget {
                         ],
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 10, right: 10, bottom: 15),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Date de vente :",
-                            style: GoogleFonts.alike(
-                                color: Colors.lightBlue.shade800,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(
-                            width: 14,
-                          ),
-                          Expanded(
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Expanded(
+                      child: SizedBox(
+                        height: 49,
+                        child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.lightBlue.shade900),
+                            onPressed: () {},
                             child: Text(
-                              created_at + " " + created_at_heure,
-                              maxLines: 2,
-                              softWrap: true,
-                              textAlign: TextAlign.justify,
+                              "Payer les crédits du client".toUpperCase(),
+                              textAlign: TextAlign.center,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                               style: GoogleFonts.alike(
-                                  color: Colors.lightBlue.shade800,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          )
-                        ],
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            )),
                       ),
                     ),
                     SizedBox(

@@ -12,6 +12,11 @@ class ProviderDrawerAdmin with ChangeNotifier {
   bool _vente_credits = false;
   bool _list_clients = false;
   bool _depot = false;
+  bool _retrait = false;
+
+  bool get retrait {
+    return _retrait;
+  }
 
   bool get home {
     return _home;
@@ -51,6 +56,7 @@ class ProviderDrawerAdmin with ChangeNotifier {
 
   void put_home() {
     _home = true;
+    _retrait = false;
     _liquidite_credit = false;
     _recharger_stock = false;
     _list_credits = false;
@@ -64,6 +70,7 @@ class ProviderDrawerAdmin with ChangeNotifier {
 
   void put_liquidite_credit() {
     _home = false;
+    _retrait = false;
     _liquidite_credit = true;
     _recharger_stock = false;
     _list_credits = false;
@@ -77,6 +84,7 @@ class ProviderDrawerAdmin with ChangeNotifier {
 
   void put_recharger_stock() {
     _home = false;
+    _retrait = false;
     _liquidite_credit = false;
     _recharger_stock = true;
     _list_credits = false;
@@ -90,6 +98,7 @@ class ProviderDrawerAdmin with ChangeNotifier {
 
   void put_list_credits() {
     _home = false;
+    _retrait = false;
     _liquidite_credit = false;
     _recharger_stock = false;
     _list_credits = true;
@@ -103,6 +112,7 @@ class ProviderDrawerAdmin with ChangeNotifier {
 
   void put_list_depense() {
     _home = false;
+    _retrait = false;
     _liquidite_credit = false;
     _recharger_stock = false;
     _list_credits = false;
@@ -116,6 +126,7 @@ class ProviderDrawerAdmin with ChangeNotifier {
 
   void put_list_perte() {
     _home = false;
+    _retrait = false;
     _liquidite_credit = false;
     _recharger_stock = false;
     _list_credits = false;
@@ -129,6 +140,7 @@ class ProviderDrawerAdmin with ChangeNotifier {
 
   void put_vente_credits() {
     _home = false;
+    _retrait = false;
     _liquidite_credit = false;
     _recharger_stock = false;
     _list_credits = false;
@@ -142,6 +154,7 @@ class ProviderDrawerAdmin with ChangeNotifier {
 
   void put_list_clients() {
     _home = false;
+    _retrait = false;
     _liquidite_credit = false;
     _recharger_stock = false;
     _list_credits = false;
@@ -155,6 +168,7 @@ class ProviderDrawerAdmin with ChangeNotifier {
 
   void put_depot() {
     _home = false;
+    _retrait = false;
     _liquidite_credit = false;
     _recharger_stock = false;
     _list_credits = false;
@@ -163,6 +177,20 @@ class ProviderDrawerAdmin with ChangeNotifier {
     _vente_credits = false;
     _list_clients = false;
     _depot = true;
+    notifyListeners();
+  }
+
+  void put_retrait() {
+    _home = false;
+    _retrait = true;
+    _liquidite_credit = false;
+    _recharger_stock = false;
+    _list_credits = false;
+    _list_depenses = false;
+    _list_perte = false;
+    _vente_credits = false;
+    _list_clients = false;
+    _depot = false;
     notifyListeners();
   }
 }

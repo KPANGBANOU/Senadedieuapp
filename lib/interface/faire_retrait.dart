@@ -12,10 +12,10 @@ import 'package:senadedieu/models/budget.dart';
 import 'package:senadedieu/models/budget_tranches.dart';
 import 'package:senadedieu/models/credits.dart';
 import 'package:senadedieu/models/user.dart';
-import 'package:senadedieu/provider/provider_vente_credit.dart';
+import 'package:senadedieu/provider/provider_gestion_retrait.dart';
 
-class VentesCredits extends StatelessWidget {
-  VentesCredits({key, required this.tranche_uid});
+class FaireRetrait extends StatelessWidget {
+  FaireRetrait({key, required this.tranche_uid});
   final String tranche_uid;
 
   @override
@@ -136,7 +136,7 @@ class VentesCredits extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(4.0),
                 child: Text(
-                  "Vente de crédits",
+                  "Effectuez des retraits",
                   textAlign: TextAlign.center,
                   style: GoogleFonts.alike(
                       color: Colors.white,
@@ -153,7 +153,7 @@ class VentesCredits extends StatelessWidget {
                 child: Container(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "Veuillez sélectionner le crédit s'il vous plait",
+                    "Veuillez sélectionner le réseau",
                     textAlign: TextAlign.left,
                     style: GoogleFonts.alike(
                         color: Colors.white,
@@ -172,7 +172,7 @@ class VentesCredits extends StatelessWidget {
                     selectedItem: grand_modele,
                     items: credits.map((Credits value) => value.nom).toList(),
                     onChanged: (value) {
-                      VenteCredit(
+                      FaireRetraitClient(
                           context,
                           value!,
                           tranche_uid,
@@ -198,7 +198,7 @@ class VentesCredits extends StatelessWidget {
     );
   }
 
-  Future<void> VenteCredit(
+  Future<void> FaireRetraitClient(
     BuildContext context,
     String value,
     String tranche_uid,
@@ -208,24 +208,21 @@ class VentesCredits extends StatelessWidget {
     double budget_tranche_benefice,
   ) async {
     TextEditingController montantCredit = TextEditingController();
-    TextEditingController descriptionPerte = TextEditingController();
     TextEditingController nomClient = TextEditingController();
     return showDialog<void>(
       barrierDismissible: false,
       context: context,
       builder: (BuildContext dialogcontext) {
-        final provider = Provider.of<ProviderVenteCredit>(dialogcontext);
+        final provider = Provider.of<ProviderGestionRetrait>(dialogcontext);
         final function = Provider.of<Functions>(dialogcontext);
         final user = Provider.of<donnesUtilisateur>(dialogcontext);
         final budget = Provider.of<Budget>(dialogcontext);
         String nom_client = provider.nom_client;
         String numero_client = provider.numero_client;
-        String numero = provider.numero;
+        String numero = provider.numero_retrait;
         int montant = provider.montant;
         bool affiche = provider.affiche;
-        bool perte = provider.perte;
-        bool payer = provider.payer;
-        String description = provider.description;
+        int benefice = provider.benefice;
         return AlertDialog(
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -264,14 +261,14 @@ class VentesCredits extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(4.0),
                   child: Text(
-                    "Veuillez chaisir le montant de vente",
+                    "Veuillez chaisir le montant de retrait",
                     textAlign: TextAlign.justify,
                     style: GoogleFonts.alike(fontWeight: FontWeight.bold),
                   ),
                 ),
                 TextField(
                   onChanged: (value) {
-                    provider.change_montant(value);
+                    provider.change_mntant(value);
                   },
                   controller: montantCredit,
                   keyboardType: TextInputType.number,
@@ -280,6 +277,29 @@ class VentesCredits extends StatelessWidget {
                       focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(
                               color: montant <= 0 ? Colors.red : Colors.blue))),
+                ),
+                SizedBox(
+                  height: 7,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Text(
+                    "Quelle bénéfice réalisez-vous sur ce montant de retrait ?",
+                    textAlign: TextAlign.justify,
+                    style: GoogleFonts.alike(fontWeight: FontWeight.bold),
+                  ),
+                ),
+                TextField(
+                  onChanged: (value) {
+                    provider.change_benefice(value);
+                  },
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  decoration: InputDecoration(
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color:
+                                  benefice <= 0 ? Colors.red : Colors.blue))),
                 ),
                 SizedBox(
                   height: 7,
@@ -336,14 +356,14 @@ class VentesCredits extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(4.0),
                   child: Text(
-                    "Veuillez saisir le numéro sur lequel le crédit serait envoyé. Répétez le numéro saisi ci haut s'il s'agit du numéro sur lequel le crédit serait envoyé",
+                    "Veuillez saisir le numéro de retrait. Répétez le numéro saisi ci haut s'il s'agit du numéro sur lequel le crédit serait envoyé",
                     textAlign: TextAlign.justify,
                     style: GoogleFonts.alike(fontWeight: FontWeight.bold),
                   ),
                 ),
                 TextField(
                   onChanged: (value) {
-                    provider.change_numero(value);
+                    provider.change_numero_retrait(value);
                   },
                   maxLength: 8,
                   keyboardType: TextInputType.number,
@@ -356,100 +376,6 @@ class VentesCredits extends StatelessWidget {
                                   ? Colors.red
                                   : Colors.blue))),
                 ),
-                SizedBox(
-                  height: 7,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Text(
-                    "Etes-vous trompé de numéro pendant la vente ? Dans ce cas, cette vente serait évidemment considérée comme une perte",
-                    textAlign: TextAlign.justify,
-                    style: GoogleFonts.alike(fontWeight: FontWeight.bold),
-                  ),
-                ),
-                RadioListTile(
-                  value: true,
-                  groupValue: perte,
-                  onChanged: (value) {
-                    provider.change_perte(value);
-                  },
-                  title: Text(
-                    "oui".toUpperCase(),
-                    style: GoogleFonts.alike(fontWeight: FontWeight.bold),
-                  ),
-                ),
-                RadioListTile(
-                  value: false,
-                  groupValue: perte,
-                  onChanged: (value) {
-                    provider.change_perte(value);
-                  },
-                  title: Text(
-                    "nom".toUpperCase(),
-                    style: GoogleFonts.alike(fontWeight: FontWeight.bold),
-                  ),
-                ),
-                perte
-                    ? Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: Text(
-                              "Décrivez la perte réalisé",
-                              textAlign: TextAlign.left,
-                              style: GoogleFonts.alike(
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          TextField(
-                            onChanged: (value) {
-                              provider.change_description(value);
-                            },
-                            controller: descriptionPerte,
-                            keyboardType: TextInputType.multiline,
-                            maxLines: null,
-                            decoration: InputDecoration(
-                                focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: description.isEmpty
-                                            ? Colors.red
-                                            : Colors.blue))),
-                          ),
-                        ],
-                      )
-                    : Column(
-                        children: [
-                          Text(
-                            "S'agit il d'une vente à crédit ?",
-                            style:
-                                GoogleFonts.alike(fontWeight: FontWeight.bold),
-                          ),
-                          RadioListTile(
-                            title: Text(
-                              "oui".toUpperCase(),
-                              style: GoogleFonts.alike(
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            value: true,
-                            groupValue: payer,
-                            onChanged: (value) {
-                              provider.change_payer(value);
-                            },
-                          ),
-                          RadioListTile(
-                            title: Text(
-                              "Non".toUpperCase(),
-                              style: GoogleFonts.alike(
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            value: false,
-                            groupValue: payer,
-                            onChanged: (value) {
-                              provider.change_payer(value);
-                            },
-                          )
-                        ],
-                      )
               ],
             ),
           ),
@@ -463,26 +389,20 @@ class VentesCredits extends StatelessWidget {
                         backgroundColor: Colors.lightBlue.shade900),
                     onPressed: () async {
                       provider.affiche_true();
-                      final String statut_code = await function.VenteCredit(
+                      final String statut_code = await function.FaireRetrait(
                           dialogcontext,
                           tranche_uid,
-                          value,
                           user.uid,
-                          descriptionPerte.text,
-                          payer,
-                          perte,
+                          budget.uid,
+                          budget.benefice,
+                          budget_tranche_uid,
+                          budget_tranche_benefice,
                           montant,
+                          value,
                           nomClient.text,
                           numero_client,
                           numero,
-                          budget.uid,
-                          budget.solde_total,
-                          budget.perte,
-                          budget.benefice,
-                          budget_tranche_uid,
-                          budget_tranche_solde_total,
-                          budget_tranche_benefice,
-                          budget_tranche_perte);
+                          benefice);
 
                       if (statut_code == "202") {
                         _speak(
@@ -523,30 +443,12 @@ class VentesCredits extends StatelessWidget {
                           behavior: SnackBarBehavior.floating,
                         );
                         ScaffoldMessenger.of(context).showSnackBar(snakbar);
-                      } else if (statut_code == "101") {
-                        _speak("Stock insuffisant");
-                        provider.affiche_false();
-                        final snakbar = SnackBar(
-                          content: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "Stock insuffisant",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          backgroundColor: Colors.redAccent.withOpacity(.7),
-                          elevation: 1,
-                          behavior: SnackBarBehavior.floating,
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(snakbar);
                       } else {
                         _speak("Effectué avec succès");
                         provider.affiche_false();
-                        provider.change_montant("");
-                        provider.change_numero("");
+                        provider.change_mntant("");
+                        provider.change_benefice("");
+                        provider.change_numero_retrait("");
                         provider.change_numero_client("");
                         final snakbar = SnackBar(
                           content: Padding(
@@ -571,32 +473,14 @@ class VentesCredits extends StatelessWidget {
                         ? CircularProgressIndicator(
                             color: Colors.white,
                           )
-                        : perte
-                            ? Text(
-                                "Enregistrez la perte".toUpperCase(),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: GoogleFonts.alike(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white),
-                              )
-                            : !payer
-                                ? Text(
-                                    "Enregistrez le crédit".toUpperCase(),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: GoogleFonts.alike(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white),
-                                  )
-                                : Text(
-                                    "Enregistrez la vente".toUpperCase(),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: GoogleFonts.alike(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white),
-                                  )),
+                        : Text(
+                            "Enregistrez le retrait".toUpperCase(),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: GoogleFonts.alike(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          )),
               ),
             )
           ],

@@ -267,6 +267,7 @@ class ListCredits extends StatelessWidget {
 
 Future<void> AddCredit(
     BuildContext context, String tranche_uid, String user_uid) {
+  TextEditingController nomCredit = TextEditingController();
   return showDialog(
     context: context,
     barrierDismissible: false,
@@ -277,7 +278,7 @@ Future<void> AddCredit(
       int benefice_sur_5000 = provider.benefice;
       int montant_initial = provider.montant_initial;
       int seuil_approvisionnement = provider.seuil_approvisionnement;
-      TextEditingController nomCredit = TextEditingController();
+
       bool affiche = provider.affiche;
       return AlertDialog(
         title: Row(

@@ -3,12 +3,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:senadedieu/base_de_donnees/service_base_de_donnees.dart';
-import 'package:senadedieu/interface/faire_depot.dart';
+import 'package:senadedieu/interface/faire_retrait.dart';
 import 'package:senadedieu/models/budget_tranches.dart';
 import 'package:senadedieu/models/credits.dart';
 
-class StreamTrancheFaireDepot extends StatelessWidget {
-  const StreamTrancheFaireDepot({super.key, required this.tranche_uid});
+class StreamTrancheFaireRetrait extends StatelessWidget {
+  const StreamTrancheFaireRetrait({super.key, required this.tranche_uid});
   final String tranche_uid;
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class StreamTrancheFaireDepot extends StatelessWidget {
             create: (context) => context.read<ServiceDB>().credits(tranche_uid),
             initialData: <Credits>[])
       ],
-      child: FaireDepot(tranche_uid: tranche_uid),
+      child: FaireRetrait(tranche_uid: tranche_uid),
     );
   }
 }

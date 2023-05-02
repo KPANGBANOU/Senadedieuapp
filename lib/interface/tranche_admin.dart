@@ -107,18 +107,9 @@ class TrancheAdmin extends StatelessWidget {
                   style: GoogleFonts.alike(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
-                      fontSize: 17),
+                      fontSize: 15),
                 ),
               ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Container(
-              alignment: Alignment.center,
-              height: 2,
-              width: 40,
-              color: Colors.white,
             ),
             SizedBox(
               height: 50,

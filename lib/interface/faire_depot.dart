@@ -12,10 +12,10 @@ import 'package:senadedieu/models/budget.dart';
 import 'package:senadedieu/models/budget_tranches.dart';
 import 'package:senadedieu/models/credits.dart';
 import 'package:senadedieu/models/user.dart';
-import 'package:senadedieu/provider/provider_vente_credit.dart';
+import 'package:senadedieu/provider/provider_gestion_depot.dart';
 
-class VentesCredits extends StatelessWidget {
-  VentesCredits({key, required this.tranche_uid});
+class FaireDepot extends StatelessWidget {
+  FaireDepot({key, required this.tranche_uid});
   final String tranche_uid;
 
   @override
@@ -136,7 +136,7 @@ class VentesCredits extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(4.0),
                 child: Text(
-                  "Vente de crédits",
+                  "Effectuez des dépots",
                   textAlign: TextAlign.center,
                   style: GoogleFonts.alike(
                       color: Colors.white,
@@ -153,7 +153,7 @@ class VentesCredits extends StatelessWidget {
                 child: Container(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "Veuillez sélectionner le crédit s'il vous plait",
+                    "Veuillez sélectionner le réseau s'il vous plait",
                     textAlign: TextAlign.left,
                     style: GoogleFonts.alike(
                         color: Colors.white,
@@ -172,12 +172,11 @@ class VentesCredits extends StatelessWidget {
                     selectedItem: grand_modele,
                     items: credits.map((Credits value) => value.nom).toList(),
                     onChanged: (value) {
-                      VenteCredit(
+                      FaireDepotClient(
                           context,
                           value!,
                           tranche_uid,
                           budget_tranche.uid,
-                          budget_tranche.perte,
                           budget_tranche.solde_total,
                           budget_tranche.benefice);
                     }),
@@ -198,34 +197,30 @@ class VentesCredits extends StatelessWidget {
     );
   }
 
-  Future<void> VenteCredit(
+  Future<void> FaireDepotClient(
     BuildContext context,
     String value,
     String tranche_uid,
     String budget_tranche_uid,
-    int budget_tranche_perte,
     int budget_tranche_solde_total,
     double budget_tranche_benefice,
   ) async {
     TextEditingController montantCredit = TextEditingController();
-    TextEditingController descriptionPerte = TextEditingController();
     TextEditingController nomClient = TextEditingController();
     return showDialog<void>(
       barrierDismissible: false,
       context: context,
       builder: (BuildContext dialogcontext) {
-        final provider = Provider.of<ProviderVenteCredit>(dialogcontext);
+        final provider = Provider.of<ProviderGestionDepot>(dialogcontext);
         final function = Provider.of<Functions>(dialogcontext);
         final user = Provider.of<donnesUtilisateur>(dialogcontext);
         final budget = Provider.of<Budget>(dialogcontext);
         String nom_client = provider.nom_client;
         String numero_client = provider.numero_client;
-        String numero = provider.numero;
+        String numero = provider.numero_depot;
         int montant = provider.montant;
         bool affiche = provider.affiche;
-        bool perte = provider.perte;
         bool payer = provider.payer;
-        String description = provider.description;
         return AlertDialog(
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -264,7 +259,7 @@ class VentesCredits extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(4.0),
                   child: Text(
-                    "Veuillez chaisir le montant de vente",
+                    "Veuillez chaisir le montant de dépot",
                     textAlign: TextAlign.justify,
                     style: GoogleFonts.alike(fontWeight: FontWeight.bold),
                   ),
@@ -336,14 +331,14 @@ class VentesCredits extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(4.0),
                   child: Text(
-                    "Veuillez saisir le numéro sur lequel le crédit serait envoyé. Répétez le numéro saisi ci haut s'il s'agit du numéro sur lequel le crédit serait envoyé",
+                    "Veuillez saisir le numéro de dépot. Répétez le numéro saisi ci haut s'il s'agit du numéro sur lequel le crédit serait envoyé",
                     textAlign: TextAlign.justify,
                     style: GoogleFonts.alike(fontWeight: FontWeight.bold),
                   ),
                 ),
                 TextField(
                   onChanged: (value) {
-                    provider.change_numero(value);
+                    provider.change_numero_depot(value);
                   },
                   maxLength: 8,
                   keyboardType: TextInputType.number,
@@ -359,97 +354,36 @@ class VentesCredits extends StatelessWidget {
                 SizedBox(
                   height: 7,
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Text(
-                    "Etes-vous trompé de numéro pendant la vente ? Dans ce cas, cette vente serait évidemment considérée comme une perte",
-                    textAlign: TextAlign.justify,
-                    style: GoogleFonts.alike(fontWeight: FontWeight.bold),
-                  ),
-                ),
-                RadioListTile(
-                  value: true,
-                  groupValue: perte,
-                  onChanged: (value) {
-                    provider.change_perte(value);
-                  },
-                  title: Text(
-                    "oui".toUpperCase(),
-                    style: GoogleFonts.alike(fontWeight: FontWeight.bold),
-                  ),
-                ),
-                RadioListTile(
-                  value: false,
-                  groupValue: perte,
-                  onChanged: (value) {
-                    provider.change_perte(value);
-                  },
-                  title: Text(
-                    "nom".toUpperCase(),
-                    style: GoogleFonts.alike(fontWeight: FontWeight.bold),
-                  ),
-                ),
-                perte
-                    ? Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: Text(
-                              "Décrivez la perte réalisé",
-                              textAlign: TextAlign.left,
-                              style: GoogleFonts.alike(
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          TextField(
-                            onChanged: (value) {
-                              provider.change_description(value);
-                            },
-                            controller: descriptionPerte,
-                            keyboardType: TextInputType.multiline,
-                            maxLines: null,
-                            decoration: InputDecoration(
-                                focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: description.isEmpty
-                                            ? Colors.red
-                                            : Colors.blue))),
-                          ),
-                        ],
-                      )
-                    : Column(
-                        children: [
-                          Text(
-                            "S'agit il d'une vente à crédit ?",
-                            style:
-                                GoogleFonts.alike(fontWeight: FontWeight.bold),
-                          ),
-                          RadioListTile(
-                            title: Text(
-                              "oui".toUpperCase(),
-                              style: GoogleFonts.alike(
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            value: true,
-                            groupValue: payer,
-                            onChanged: (value) {
-                              provider.change_payer(value);
-                            },
-                          ),
-                          RadioListTile(
-                            title: Text(
-                              "Non".toUpperCase(),
-                              style: GoogleFonts.alike(
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            value: false,
-                            groupValue: payer,
-                            onChanged: (value) {
-                              provider.change_payer(value);
-                            },
-                          )
-                        ],
-                      )
+                Column(
+                  children: [
+                    Text(
+                      "S'agit il d'un dépot payé ?",
+                      style: GoogleFonts.alike(fontWeight: FontWeight.bold),
+                    ),
+                    RadioListTile(
+                      title: Text(
+                        "oui".toUpperCase(),
+                        style: GoogleFonts.alike(fontWeight: FontWeight.bold),
+                      ),
+                      value: true,
+                      groupValue: payer,
+                      onChanged: (value) {
+                        provider.change_payer(value);
+                      },
+                    ),
+                    RadioListTile(
+                      title: Text(
+                        "Non".toUpperCase(),
+                        style: GoogleFonts.alike(fontWeight: FontWeight.bold),
+                      ),
+                      value: false,
+                      groupValue: payer,
+                      onChanged: (value) {
+                        provider.change_payer(value);
+                      },
+                    )
+                  ],
+                )
               ],
             ),
           ),
@@ -463,47 +397,47 @@ class VentesCredits extends StatelessWidget {
                         backgroundColor: Colors.lightBlue.shade900),
                     onPressed: () async {
                       provider.affiche_true();
-                      final String statut_code = await function.VenteCredit(
+                      final String statut_code = await function.FaireDepot(
                           dialogcontext,
                           tranche_uid,
-                          value,
                           user.uid,
-                          descriptionPerte.text,
-                          payer,
-                          perte,
+                          value,
                           montant,
+                          payer,
                           nomClient.text,
-                          numero_client,
                           numero,
+                          numero_client,
                           budget.uid,
                           budget.solde_total,
-                          budget.perte,
                           budget.benefice,
                           budget_tranche_uid,
                           budget_tranche_solde_total,
-                          budget_tranche_benefice,
-                          budget_tranche_perte);
+                          budget_tranche_benefice);
 
-                      if (statut_code == "202") {
-                        _speak(
-                            "Vérifiez si vous avez activé les données mobiles");
+                      if (statut_code == "200") {
+                        _speak("Effectué avec succès");
                         provider.affiche_false();
+                        provider.change_montant("");
+                        provider.change_numero_depot("");
+                        provider.change_numero_client("");
                         final snakbar = SnackBar(
                           content: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
-                              "Une erreur s'est produite",
+                              "Effectué avec succès",
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold),
                             ),
                           ),
-                          backgroundColor: Colors.redAccent.withOpacity(.7),
+                          backgroundColor: Colors.black87,
                           elevation: 1,
                           behavior: SnackBarBehavior.floating,
                         );
-                        ScaffoldMessenger.of(context).showSnackBar(snakbar);
+                        ScaffoldMessenger.of(dialogcontext)
+                            .showSnackBar(snakbar);
+                        Navigator.of(dialogcontext).pop();
                       } else if (statut_code == "100") {
                         _speak("Champs invalides");
                         provider.affiche_false();
@@ -523,7 +457,7 @@ class VentesCredits extends StatelessWidget {
                           behavior: SnackBarBehavior.floating,
                         );
                         ScaffoldMessenger.of(context).showSnackBar(snakbar);
-                      } else if (statut_code == "101") {
+                      } else if (statut_code == "201") {
                         _speak("Stock insuffisant");
                         provider.affiche_false();
                         final snakbar = SnackBar(
@@ -543,60 +477,48 @@ class VentesCredits extends StatelessWidget {
                         );
                         ScaffoldMessenger.of(context).showSnackBar(snakbar);
                       } else {
-                        _speak("Effectué avec succès");
+                        _speak(
+                            "Vérifiez si vous avez activé les données mobiles");
                         provider.affiche_false();
-                        provider.change_montant("");
-                        provider.change_numero("");
-                        provider.change_numero_client("");
                         final snakbar = SnackBar(
                           content: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
-                              "Effectué avec succès",
+                              "Une erreur s'est produite",
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold),
                             ),
                           ),
-                          backgroundColor: Colors.black87,
+                          backgroundColor: Colors.redAccent.withOpacity(.7),
                           elevation: 1,
                           behavior: SnackBarBehavior.floating,
                         );
                         ScaffoldMessenger.of(context).showSnackBar(snakbar);
-                        Navigator.of(dialogcontext).pop();
                       }
                     },
                     child: affiche
                         ? CircularProgressIndicator(
                             color: Colors.white,
                           )
-                        : perte
+                        : !payer
                             ? Text(
-                                "Enregistrez la perte".toUpperCase(),
+                                "Enregistrez le crédit".toUpperCase(),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: GoogleFonts.alike(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white),
                               )
-                            : !payer
-                                ? Text(
-                                    "Enregistrez le crédit".toUpperCase(),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: GoogleFonts.alike(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white),
-                                  )
-                                : Text(
-                                    "Enregistrez la vente".toUpperCase(),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: GoogleFonts.alike(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white),
-                                  )),
+                            : Text(
+                                "Enregistrez le dépot".toUpperCase(),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: GoogleFonts.alike(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white),
+                              )),
               ),
             )
           ],

@@ -11,7 +11,7 @@ class Retraits {
   final String client_uid;
   final String credit_uid;
   final int montant;
-  final double benefice;
+  final int benefice;
   final String created_at;
   final String created_at_heure;
   final String credit_nom;
@@ -54,7 +54,7 @@ class Retraits {
     String? client_uid,
     String? credit_uid,
     int? montant,
-    double? benefice,
+    int? benefice,
     String? created_at,
     String? created_at_heure,
     String? credit_nom,
@@ -101,7 +101,7 @@ class Retraits {
       client_uid: map['client_uid'] ?? '',
       credit_uid: map['credit_uid'] ?? '',
       montant: map['montant']?.toInt() ?? 0,
-      benefice: map['benefice']?.toDouble() ?? 0.0,
+      benefice: map['benefice']?.toInt() ?? 0,
       created_at: map['created_at'] ?? '',
       created_at_heure: map['created_at_heure'] ?? '',
       credit_nom: map['credit_nom'] ?? '',
