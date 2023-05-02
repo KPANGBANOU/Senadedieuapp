@@ -391,7 +391,7 @@ class UpdateCredit extends StatelessWidget {
                                     fontWeight: FontWeight.bold),
                               ),
                             ),
-                            backgroundColor: Colors.redAccent.withOpacity(.7),
+                            backgroundColor: Colors.black87,
                             elevation: 1,
                             behavior: SnackBarBehavior.floating,
                           );

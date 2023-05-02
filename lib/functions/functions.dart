@@ -2277,6 +2277,12 @@ class Functions {
                   .update({
                 "benefice": budget_benefice + element.data()['benefice']
               });
+              await FirebaseFirestore.instance
+                  .collection("tranches")
+                  .doc(tranche_uid)
+                  .collection("depots")
+                  .doc(element.id)
+                  .update({"paye": true});
             }
           });
 
@@ -2346,6 +2352,13 @@ class Functions {
                 "solde_total": budget_solde_total + element.data()['montant'],
                 "benefice": budget_benefice + element.data()['benefice']
               });
+
+              await FirebaseFirestore.instance
+                  .collection("tranches")
+                  .doc(tranche_uid)
+                  .collection("vente_a_credits")
+                  .doc(element.id)
+                  .update({"paye": true});
             }
           });
 

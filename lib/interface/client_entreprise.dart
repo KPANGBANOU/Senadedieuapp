@@ -1,11 +1,15 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables, non_constant_identifier_names, prefer_interpolation_to_compose_strings, no_leading_underscores_for_local_identifiers, unused_local_variable
+// ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables, non_constant_identifier_names, prefer_interpolation_to_compose_strings, no_leading_underscores_for_local_identifiers, unused_local_variable, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:senadedieu/functions/functions.dart';
 import 'package:senadedieu/interface/drawer_admin.dart';
+import 'package:senadedieu/models/budget.dart';
 import 'package:senadedieu/models/budget_tranches.dart';
 import 'package:senadedieu/models/client.dart';
+import 'package:senadedieu/provider/provider_paiement.dart';
 
 class ClientEntreprise extends StatelessWidget {
   ClientEntreprise({
@@ -355,27 +359,45 @@ class ClientEntreprise extends StatelessWidget {
                         ],
                       ),
                     ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Expanded(
-                      child: SizedBox(
-                        height: 49,
-                        child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.lightBlue.shade900),
-                            onPressed: () {},
-                            child: Text(
-                              "Payer les crédits du client".toUpperCase(),
-                              textAlign: TextAlign.center,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: GoogleFonts.alike(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
-                            )),
-                      ),
-                    ),
+                    client.total_depot_non_paye + client.total_non_paye > 0
+                        ? Column(
+                            children: [
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Expanded(
+                                child: SizedBox(
+                                  height: 49,
+                                  child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                          backgroundColor:
+                                              Colors.lightBlue.shade900),
+                                      onPressed: () {
+                                        ConfirmPaiement(
+                                            context,
+                                            client.nom,
+                                            client.total_depot_non_paye,
+                                            client.total_non_paye,
+                                            client.uid,
+                                            budget_tranche.uid,
+                                            budget_tranche.solde_total,
+                                            budget_tranche.benefice);
+                                      },
+                                      child: Text(
+                                        "Payer les crédits du client"
+                                            .toUpperCase(),
+                                        textAlign: TextAlign.center,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: GoogleFonts.alike(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white),
+                                      )),
+                                ),
+                              ),
+                            ],
+                          )
+                        : Container(),
                     SizedBox(
                       height: 30,
                     )
@@ -390,5 +412,170 @@ class ClientEntreprise extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future ConfirmPaiement(
+      BuildContext context,
+      String client_nom,
+      int total_depot_non_paye,
+      int total_non_paye,
+      String client_uid,
+      String budget_tranche_uid,
+      int budget_tranche_solde_total,
+      double budget_tranche_benefice) {
+    return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext dialogcontext) {
+        final provider = Provider.of<ProviderPaiement>(dialogcontext);
+        final function = Provider.of<Functions>(dialogcontext);
+        final budget = Provider.of<Budget>(dialogcontext);
+        bool affiche = provider.affiche;
+        return AlertDialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Text(
+                "Paiement de crédit",
+                style: GoogleFonts.alike(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Container(
+                height: 40,
+                width: 40,
+                decoration: BoxDecoration(
+                    color: Colors.lightBlue.shade900,
+                    borderRadius: BorderRadius.circular(20)),
+                child: IconButton(
+                    onPressed: () {
+                      Navigator.of(dialogcontext).pop();
+                    },
+                    icon: Icon(
+                      Icons.close,
+                      color: Colors.white,
+                    )),
+              )
+            ],
+          ),
+          content: Text(
+            "Le client " +
+                client_nom +
+                " veut il payer la totalité de " +
+                (total_depot_non_paye + total_non_paye).toString() +
+                " XOF de son crédit ?",
+            style: GoogleFonts.alike(
+                fontWeight: FontWeight.bold, color: Colors.black),
+          ),
+          actions: [
+            SizedBox(
+              height: 48,
+              width: double.infinity,
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.lightBlue.shade900),
+                  onPressed: () async {
+                    provider.affiche_true();
+                    final String statut_code = await function.PayerCreditClient(
+                        tranche_uid,
+                        client_uid,
+                        total_non_paye,
+                        total_depot_non_paye,
+                        budget.uid,
+                        budget.solde_total,
+                        budget.benefice,
+                        budget_tranche_uid,
+                        budget_tranche_solde_total,
+                        budget_tranche_benefice);
+
+                    if (statut_code == "202") {
+                      _speak(
+                          "Une erreur est survenue. Vérifiez si les données mobiles sont activées");
+                      provider.affiche_false();
+                      final snakbar = SnackBar(
+                        content: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "Une erreur s'est produite",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        backgroundColor: Colors.redAccent.withOpacity(.7),
+                        elevation: 1,
+                        behavior: SnackBarBehavior.floating,
+                      );
+                      ScaffoldMessenger.of(dialogcontext).showSnackBar(snakbar);
+                    } else if (statut_code == "100") {
+                      _speak("Données invalides");
+                      provider.affiche_false();
+                      final snakbar = SnackBar(
+                        content: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "Données invalides",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        backgroundColor: Colors.redAccent.withOpacity(.7),
+                        elevation: 1,
+                        behavior: SnackBarBehavior.floating,
+                      );
+                      ScaffoldMessenger.of(dialogcontext).showSnackBar(snakbar);
+                    } else {
+                      _speak("Paiement notifié avec succès");
+                      provider.affiche_false();
+                      final snakbar = SnackBar(
+                        content: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "Effectué avec succès",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        backgroundColor: Colors.black87,
+                        elevation: 1,
+                        behavior: SnackBarBehavior.floating,
+                      );
+                      ScaffoldMessenger.of(dialogcontext).showSnackBar(snakbar);
+                      Navigator.of(dialogcontext).pop();
+                    }
+                  },
+                  child: affiche
+                      ? CircularProgressIndicator(
+                          color: Colors.white,
+                        )
+                      : Text(
+                          "Confirmez le paiement",
+                          textAlign: TextAlign.center,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.alike(
+                              fontWeight: FontWeight.bold, color: Colors.white),
+                        )),
+            )
+          ],
+        );
+      },
+    );
+  }
+
+  Future _speak(String text) async {
+    final FlutterTts _flutter_tts = FlutterTts();
+    _flutter_tts.setLanguage("Fr");
+    _flutter_tts.setSpeechRate(0.5);
+    _flutter_tts.setVolume(0.5);
+    _flutter_tts.setPitch(1.0);
+    _flutter_tts.speak(text);
   }
 }

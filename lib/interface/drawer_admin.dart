@@ -11,6 +11,8 @@ import 'package:senadedieu/interface/stream_tranche_faire_retrait.dart';
 import 'package:senadedieu/interface/stream_tranche_liquidite_credits.dart';
 import 'package:senadedieu/interface/stream_tranche_list_client.dart';
 import 'package:senadedieu/interface/stream_tranche_list_credit.dart';
+import 'package:senadedieu/interface/stream_tranche_list_depense.dart';
+import 'package:senadedieu/interface/stream_tranche_list_pertes.dart';
 import 'package:senadedieu/interface/stream_tranche_vente_credits.dart';
 import 'package:senadedieu/models/user.dart';
 import 'package:senadedieu/provider/provider_drawer_admin.dart';
@@ -83,6 +85,7 @@ class DrawerAdmin extends StatelessWidget {
               )),
             ),
             ListTile(
+              leading: Icon(Icons.home),
               textColor: home ? Colors.white : Colors.black,
               tileColor: home ? Colors.lightBlue.shade800 : null,
               title: Text(
@@ -99,6 +102,7 @@ class DrawerAdmin extends StatelessWidget {
               },
             ),
             ListTile(
+              leading: Icon(Icons.inventory_2_outlined),
               textColor: liquidite ? Colors.white : Colors.black,
               tileColor: liquidite ? Colors.lightBlue.shade800 : null,
               title: Text(
@@ -116,6 +120,7 @@ class DrawerAdmin extends StatelessWidget {
               },
             ),
             ListTile(
+              leading: Icon(Icons.shopping_cart_outlined),
               textColor: vente_credits ? Colors.white : Colors.black,
               tileColor: vente_credits ? Colors.lightBlue.shade800 : null,
               title: Text(
@@ -133,6 +138,7 @@ class DrawerAdmin extends StatelessWidget {
               },
             ),
             ListTile(
+              leading: Icon(Icons.account_balance_wallet_outlined),
               textColor: depot ? Colors.white : Colors.black,
               tileColor: depot ? Colors.lightBlue.shade800 : null,
               title: Text(
@@ -150,6 +156,7 @@ class DrawerAdmin extends StatelessWidget {
               },
             ),
             ListTile(
+              leading: Icon(Icons.add_shopping_cart_outlined),
               textColor: recharger_stock ? Colors.white : Colors.black,
               tileColor: recharger_stock ? Colors.lightBlue.shade800 : null,
               title: Text(
@@ -168,6 +175,7 @@ class DrawerAdmin extends StatelessWidget {
               },
             ),
             ListTile(
+              leading: Icon(Icons.monetization_on_outlined),
               textColor: retrait ? Colors.white : Colors.black,
               tileColor: retrait ? Colors.lightBlue.shade800 : null,
               title: Text(
@@ -185,6 +193,7 @@ class DrawerAdmin extends StatelessWidget {
               },
             ),
             ListTile(
+              leading: Icon(Icons.signal_cellular_alt_outlined),
               textColor: list_credits ? Colors.white : Colors.black,
               tileColor: list_credits ? Colors.lightBlue.shade800 : null,
               title: Text(
@@ -202,6 +211,7 @@ class DrawerAdmin extends StatelessWidget {
               },
             ),
             ListTile(
+              leading: Icon(Icons.people_outlined),
               textColor: list_clients ? Colors.white : Colors.black,
               tileColor: list_clients ? Colors.lightBlue.shade800 : null,
               title: Text(
@@ -219,6 +229,7 @@ class DrawerAdmin extends StatelessWidget {
               },
             ),
             ListTile(
+              leading: Icon(Icons.money_off_outlined),
               textColor: list_depenses ? Colors.white : Colors.black,
               tileColor: list_depenses ? Colors.lightBlue.shade800 : null,
               title: Text(
@@ -227,14 +238,16 @@ class DrawerAdmin extends StatelessWidget {
               ),
               onTap: () {
                 provider.put_list_depense();
-                /* Navigator.push(
+                Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => AccueilAdmin(),
-                    ));*/
+                      builder: (context) =>
+                          StreamTrancheListDepense(tranche_uid: tranche_uid),
+                    ));
               },
             ),
             ListTile(
+              leading: Icon(Icons.trending_down_outlined),
               textColor: list_pertes ? Colors.white : Colors.black,
               tileColor: list_pertes ? Colors.lightBlue.shade800 : null,
               title: Text(
@@ -243,11 +256,12 @@ class DrawerAdmin extends StatelessWidget {
               ),
               onTap: () {
                 provider.put_list_perte();
-                /*Navigator.push(
+                Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => AccueilAdmin(),
-                    ));*/
+                      builder: (context) =>
+                          StreamTrancheListPertes(tranche_uid: tranche_uid),
+                    ));
               },
             ),
             ListTile(
