@@ -3,11 +3,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:senadedieu/base_de_donnees/service_base_de_donnees.dart';
-import 'package:senadedieu/interface/list_vente_a_credit_paye.dart';
-import 'package:senadedieu/models/vente_a_credit.dart';
+import 'package:senadedieu/interface/list_depot_marchants.dart';
+import 'package:senadedieu/models/depot_marchant.dart';
 
-class StreamTrancheVenteACreditsPayes extends StatelessWidget {
-  const StreamTrancheVenteACreditsPayes({super.key, required this.tranche_uid});
+class StreamTrancheListDepotsMarchants extends StatelessWidget {
+  const StreamTrancheListDepotsMarchants(
+      {super.key, required this.tranche_uid});
   final String tranche_uid;
   @override
   Widget build(BuildContext context) {
@@ -16,10 +17,10 @@ class StreamTrancheVenteACreditsPayes extends StatelessWidget {
         Provider(create: (_) => ServiceDB()),
         StreamProvider(
             create: (context) =>
-                context.read<ServiceDB>().ventes_a_credits(tranche_uid),
-            initialData: <VenteACredits>[])
+                context.read<ServiceDB>().depots_marchants(tranche_uid),
+            initialData: <DepotMarchants>[])
       ],
-      child: ListVenteACreditsPaye(tranche_uid: tranche_uid),
+      child: ListDepotsMarchants(tranche_uid: tranche_uid),
     );
   }
 }

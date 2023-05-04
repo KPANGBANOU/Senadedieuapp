@@ -100,7 +100,7 @@ class LiquiditeCredit extends StatelessWidget {
               decoration: BoxDecoration(
                   color: Colors.white, borderRadius: BorderRadius.circular(20)),
               child: Padding(
-                padding: const EdgeInsets.only(left: 0),
+                padding: const EdgeInsets.only(left: 20),
                 child: Column(
                   // ignore: prefer_const_literals_to_create_immutables
                   children: [
@@ -117,7 +117,7 @@ class LiquiditeCredit extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "Disponibilité du crédit ".toUpperCase(),
+                            "Liquuidité du crédit ".toUpperCase(),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: GoogleFonts.alike(
@@ -141,16 +141,46 @@ class LiquiditeCredit extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Text(
+                          "Montant initial cumulé ",
+                          style: GoogleFonts.alike(
+                              color: Colors.lightBlue.shade800,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(
+                          width: 14,
+                        ),
+                        Expanded(
+                          child: Text(
+                            _credit.montant_initial_cumule.toString() + " XOF",
+                            style: GoogleFonts.alike(
+                                color: Colors.lightBlue.shade800,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Text(
                           "Montant initial",
                           style: GoogleFonts.alike(
                               color: Colors.lightBlue.shade800,
                               fontWeight: FontWeight.bold),
                         ),
-                        Text(
-                          _credit.montant_initial.toString() + " XOF",
-                          style: GoogleFonts.alike(
-                              color: Colors.lightBlue.shade800,
-                              fontWeight: FontWeight.bold),
+                        SizedBox(
+                          width: 14,
+                        ),
+                        Expanded(
+                          child: Text(
+                            _credit.montant_initial.toString() + " XOF",
+                            style: GoogleFonts.alike(
+                                color: Colors.lightBlue.shade800,
+                                fontWeight: FontWeight.bold),
+                          ),
                         )
                       ],
                     ),
@@ -166,13 +196,19 @@ class LiquiditeCredit extends StatelessWidget {
                               color: Colors.lightBlue.shade800,
                               fontWeight: FontWeight.bold),
                         ),
-                        Text(
-                          (_credit.montant_initial - _credit.montant_disponible)
-                                  .toString() +
-                              " XOF",
-                          style: GoogleFonts.alike(
-                              color: Colors.lightBlue.shade800,
-                              fontWeight: FontWeight.bold),
+                        SizedBox(
+                          width: 14,
+                        ),
+                        Expanded(
+                          child: Text(
+                            (_credit.montant_initial -
+                                        _credit.montant_disponible)
+                                    .toString() +
+                                " XOF",
+                            style: GoogleFonts.alike(
+                                color: Colors.lightBlue.shade800,
+                                fontWeight: FontWeight.bold),
+                          ),
                         )
                       ],
                     ),
@@ -183,16 +219,46 @@ class LiquiditeCredit extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Text(
-                          "Montant restant",
+                          "Montant disponible",
                           style: GoogleFonts.alike(
                               color: Colors.lightBlue.shade800,
                               fontWeight: FontWeight.bold),
                         ),
+                        SizedBox(
+                          width: 14,
+                        ),
+                        Expanded(
+                          child: Text(
+                            _credit.montant_disponible.toString() + " XOF",
+                            style: GoogleFonts.alike(
+                                color: Colors.lightBlue.shade800,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
                         Text(
-                          _credit.montant_disponible.toString() + " XOF",
+                          "Bénéfice brute cumulé",
                           style: GoogleFonts.alike(
                               color: Colors.lightBlue.shade800,
                               fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(
+                          width: 14,
+                        ),
+                        Expanded(
+                          child: Text(
+                            _credit.benefice_cumule.toString() + " XOF",
+                            style: GoogleFonts.alike(
+                                color: Colors.lightBlue.shade800,
+                                fontWeight: FontWeight.bold),
+                          ),
                         )
                       ],
                     ),
@@ -208,11 +274,41 @@ class LiquiditeCredit extends StatelessWidget {
                               color: Colors.lightBlue.shade800,
                               fontWeight: FontWeight.bold),
                         ),
+                        SizedBox(
+                          width: 14,
+                        ),
+                        Expanded(
+                          child: Text(
+                            _credit.benefice.toString() + " XOF",
+                            style: GoogleFonts.alike(
+                                color: Colors.lightBlue.shade800,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
                         Text(
-                          _credit.benefice.toString() + " XOF",
+                          "Bénéfice sur 5000 XOF de vente ",
                           style: GoogleFonts.alike(
                               color: Colors.lightBlue.shade800,
                               fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(
+                          width: 14,
+                        ),
+                        Expanded(
+                          child: Text(
+                            _credit.benefice_sur_5000.toString() + " XOF",
+                            style: GoogleFonts.alike(
+                                color: Colors.lightBlue.shade800,
+                                fontWeight: FontWeight.bold),
+                          ),
                         )
                       ],
                     ),
@@ -228,11 +324,16 @@ class LiquiditeCredit extends StatelessWidget {
                               color: Colors.lightBlue.shade800,
                               fontWeight: FontWeight.bold),
                         ),
-                        Text(
-                          _credit.seuil_approvisionnement.toString() + " XOF",
-                          style: GoogleFonts.alike(
-                              color: Colors.lightBlue.shade800,
-                              fontWeight: FontWeight.bold),
+                        SizedBox(
+                          width: 14,
+                        ),
+                        Expanded(
+                          child: Text(
+                            _credit.seuil_approvisionnement.toString() + " XOF",
+                            style: GoogleFonts.alike(
+                                color: Colors.lightBlue.shade800,
+                                fontWeight: FontWeight.bold),
+                          ),
                         )
                       ],
                     ),
@@ -243,16 +344,23 @@ class LiquiditeCredit extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Text(
-                          "Crédit ajouté le ",
+                          "Ajouté le ",
                           style: GoogleFonts.alike(
                               color: Colors.lightBlue.shade800,
                               fontWeight: FontWeight.bold),
                         ),
-                        Text(
-                          _credit.created_at + " à " + _credit.created_at_heure,
-                          style: GoogleFonts.alike(
-                              color: Colors.lightBlue.shade800,
-                              fontWeight: FontWeight.bold),
+                        SizedBox(
+                          width: 14,
+                        ),
+                        Expanded(
+                          child: Text(
+                            _credit.created_at +
+                                " à " +
+                                _credit.created_at_heure,
+                            style: GoogleFonts.alike(
+                                color: Colors.lightBlue.shade800,
+                                fontWeight: FontWeight.bold),
+                          ),
                         )
                       ],
                     ),
@@ -268,11 +376,16 @@ class LiquiditeCredit extends StatelessWidget {
                               color: Colors.lightBlue.shade800,
                               fontWeight: FontWeight.bold),
                         ),
-                        Text(
-                          user.prenom + " " + user.nom,
-                          style: GoogleFonts.alike(
-                              color: Colors.lightBlue.shade800,
-                              fontWeight: FontWeight.bold),
+                        SizedBox(
+                          width: 14,
+                        ),
+                        Expanded(
+                          child: Text(
+                            user.prenom + " " + user.nom,
+                            style: GoogleFonts.alike(
+                                color: Colors.lightBlue.shade800,
+                                fontWeight: FontWeight.bold),
+                          ),
                         )
                       ],
                     ),
@@ -288,11 +401,16 @@ class LiquiditeCredit extends StatelessWidget {
                               color: Colors.lightBlue.shade800,
                               fontWeight: FontWeight.bold),
                         ),
-                        Text(
-                          user.email,
-                          style: GoogleFonts.alike(
-                              color: Colors.lightBlue.shade800,
-                              fontWeight: FontWeight.bold),
+                        SizedBox(
+                          width: 14,
+                        ),
+                        Expanded(
+                          child: Text(
+                            user.email,
+                            style: GoogleFonts.alike(
+                                color: Colors.lightBlue.shade800,
+                                fontWeight: FontWeight.bold),
+                          ),
                         )
                       ],
                     ),
@@ -308,11 +426,16 @@ class LiquiditeCredit extends StatelessWidget {
                               color: Colors.lightBlue.shade800,
                               fontWeight: FontWeight.bold),
                         ),
-                        Text(
-                          user.telephone,
-                          style: GoogleFonts.alike(
-                              color: Colors.lightBlue.shade800,
-                              fontWeight: FontWeight.bold),
+                        SizedBox(
+                          width: 14,
+                        ),
+                        Expanded(
+                          child: Text(
+                            user.telephone,
+                            style: GoogleFonts.alike(
+                                color: Colors.lightBlue.shade800,
+                                fontWeight: FontWeight.bold),
+                          ),
                         )
                       ],
                     ),
@@ -321,10 +444,10 @@ class LiquiditeCredit extends StatelessWidget {
                     ),
                     SizedBox(
                       height: 48,
-                      width: MediaQuery.of(context).size.width * 0.96,
+                      width: MediaQuery.of(context).size.width * 0.9,
                       child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.green.shade800),
+                              backgroundColor: Colors.lightBlue.shade900),
                           onPressed: () {
                             Navigator.push(
                                 context,

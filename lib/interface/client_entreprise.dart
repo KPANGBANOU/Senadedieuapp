@@ -359,41 +359,40 @@ class ClientEntreprise extends StatelessWidget {
                         ],
                       ),
                     ),
-                    client.total_depot_non_paye + client.total_non_paye > 0
+                    (client.total_depot_non_paye + client.total_non_paye) > 0
                         ? Column(
                             children: [
                               SizedBox(
                                 height: 20,
                               ),
-                              Expanded(
-                                child: SizedBox(
-                                  height: 49,
-                                  child: ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                          backgroundColor:
-                                              Colors.lightBlue.shade900),
-                                      onPressed: () {
-                                        ConfirmPaiement(
-                                            context,
-                                            client.nom,
-                                            client.total_depot_non_paye,
-                                            client.total_non_paye,
-                                            client.uid,
-                                            budget_tranche.uid,
-                                            budget_tranche.solde_total,
-                                            budget_tranche.benefice);
-                                      },
-                                      child: Text(
-                                        "Payer les crédits du client"
-                                            .toUpperCase(),
-                                        textAlign: TextAlign.center,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: GoogleFonts.alike(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white),
-                                      )),
-                                ),
+                              SizedBox(
+                                height: 49,
+                                width: MediaQuery.of(context).size.width * 0.82,
+                                child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor:
+                                            Colors.lightBlue.shade900),
+                                    onPressed: () {
+                                      ConfirmPaiement(
+                                          context,
+                                          client.nom,
+                                          client.total_depot_non_paye,
+                                          client.total_non_paye,
+                                          client.uid,
+                                          budget_tranche.uid,
+                                          budget_tranche.solde_total,
+                                          budget_tranche.benefice);
+                                    },
+                                    child: Text(
+                                      "Payer les crédits du client"
+                                          .toUpperCase(),
+                                      textAlign: TextAlign.center,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: GoogleFonts.alike(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white),
+                                    )),
                               ),
                             ],
                           )

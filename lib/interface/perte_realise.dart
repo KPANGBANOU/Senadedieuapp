@@ -362,6 +362,7 @@ class PerteRealise extends StatelessWidget {
         final function = Provider.of<Functions>(dialogContext);
         final budget = Provider.of<Budget>(dialogContext);
         int montant = provider.montant;
+        int _montant = 0;
         String description = provider.description;
         bool affiche = provider.affiche;
         return AlertDialog(
@@ -451,12 +452,15 @@ class PerteRealise extends StatelessWidget {
                       ),
                       onPressed: () async {
                         provider.affiche_true();
+                        _montant = montantPerte.text.isEmpty
+                            ? 0
+                            : int.parse(montantPerte.text);
                         final String statut_code = await function.UpdatePerte(
                             tranche_uid,
                             perte_uid,
                             perte_montant,
-                            montant,
-                            description,
+                            _montant,
+                            descriptionPerte.text,
                             budget.uid,
                             budget_tranche_uid,
                             budget.perte,

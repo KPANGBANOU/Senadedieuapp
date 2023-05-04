@@ -39,6 +39,9 @@ class UpdateCredit extends StatelessWidget {
     int montant_initial = provider.montant_initial;
     int benefice_sur_5000 = provider.benefice;
     int seuil_approvisionnement = provider.seuil_approvisionnement;
+    int _seuil_approvisionnement = 0;
+    int _montant_disponible = 0;
+    int _benefice_sur_5000 = 0;
     return Scaffold(
         backgroundColor: Colors.lightBlue.shade900,
         drawer: DrawerAdmin(tranche_uid: tranche_uid),
@@ -115,7 +118,7 @@ class UpdateCredit extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: GoogleFonts.alike(
                     color: Colors.white,
-                    fontSize: 20,
+                    fontSize: 18,
                     fontWeight: FontWeight.bold),
               ),
               SizedBox(
@@ -126,7 +129,7 @@ class UpdateCredit extends StatelessWidget {
                 child: Container(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "Nouveau nom du crédit",
+                    "Nom du réseau GSMt",
                     textAlign: TextAlign.left,
                     style: GoogleFonts.alike(
                         color: Colors.white,
@@ -255,7 +258,7 @@ class UpdateCredit extends StatelessWidget {
                 child: Container(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "Bénéfice sur 5000 F de vente de " + credit.nom,
+                    "Bénéfice sur 5000 XOF de vente de " + credit.nom,
                     textAlign: TextAlign.left,
                     style: GoogleFonts.alike(
                         color: Colors.white,
@@ -304,18 +307,27 @@ class UpdateCredit extends StatelessWidget {
                   child: ElevatedButton(
                       onPressed: () async {
                         provider.affiche_true();
-
+                        _montant_disponible = montantDisponible.text.isEmpty
+                            ? 0
+                            : int.parse(montantDisponible.text);
+                        _benefice_sur_5000 = benefice.text.isEmpty
+                            ? 0
+                            : int.parse(benefice.text);
+                        _seuil_approvisionnement =
+                            seuilAprovisionnement.text.isEmpty
+                                ? 0
+                                : int.parse(seuilAprovisionnement.text);
                         final String statut_code = await function.UpdateCredit(
                             tranche_uid,
                             credit.uid,
                             credit.nom,
                             nomCredit.text,
-                            benefice_sur_5000,
+                            _benefice_sur_5000,
                             credit.montant_initial,
                             credit.montant_initial_cumule,
-                            seuil_approvisionnement,
+                            _seuil_approvisionnement,
                             credit.montant_disponible,
-                            montant_initial);
+                            _montant_disponible);
 
                         if (statut_code == "202") {
                           _speak(

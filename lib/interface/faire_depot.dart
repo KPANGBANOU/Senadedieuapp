@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:senadedieu/functions/functions.dart';
 import 'package:senadedieu/interface/drawer_admin.dart';
+import 'package:senadedieu/interface/list_credits.dart';
 import 'package:senadedieu/models/budget.dart';
 import 'package:senadedieu/models/budget_tranches.dart';
 import 'package:senadedieu/models/credits.dart';
@@ -51,8 +52,10 @@ class FaireDepot extends StatelessWidget {
           child: CircularProgressIndicator(color: Colors.white),
         ),
         floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.lightBlue.shade900,
-          onPressed: () {},
+          backgroundColor: Colors.brown.shade900,
+          onPressed: () {
+            AddCredit(context, tranche_uid, user.uid);
+          },
           child: Icon(
             Icons.add,
             color: Colors.white,
@@ -188,7 +191,9 @@ class FaireDepot extends StatelessWidget {
           )),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.brown.shade900,
-        onPressed: () {},
+        onPressed: () {
+          AddCredit(context, tranche_uid, user.uid);
+        },
         child: Icon(
           Icons.add,
           color: Colors.white,
@@ -437,7 +442,6 @@ class FaireDepot extends StatelessWidget {
                         );
                         ScaffoldMessenger.of(dialogcontext)
                             .showSnackBar(snakbar);
-                        Navigator.of(dialogcontext).pop();
                       } else if (statut_code == "100") {
                         _speak("Champs invalides");
                         provider.affiche_false();

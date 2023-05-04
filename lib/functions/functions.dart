@@ -2107,6 +2107,8 @@ class Functions {
             "updated_at": DateTime.now()
           });
 
+          Navigator.of(context).pop();
+
           Navigator.push(
               context,
               MaterialPageRoute(
@@ -2121,20 +2123,20 @@ class Functions {
                     numero: numero,
                     total_depot_client:
                         is_empty ? montant : total_depot + montant,
-                    total_non_paye: payer
-                        ? is_empty
+                    total_non_paye: is_empty
+                        ? payer
                             ? 0
-                            : total_depot_non_paye
-                        : is_empty
+                            : montant
+                        : payer
                             ? total_depot_non_paye
-                            : total_depot + montant),
+                            : total_depot_non_paye + montant),
               ));
 
           return "200";
         }
       }
     } catch (e) {
-      return e.toString();
+      return "202";
     }
   }
 
@@ -2222,6 +2224,7 @@ class Functions {
       } else {
         double credit_benefice = 0;
         double credit_benefice_cumule = 0;
+
         if (client_depot_total_non_paye > 0) {
           final depot_request = await FirebaseFirestore.instance
               .collection("tranches")
@@ -2352,13 +2355,6 @@ class Functions {
                 "solde_total": budget_solde_total + element.data()['montant'],
                 "benefice": budget_benefice + element.data()['benefice']
               });
-
-              await FirebaseFirestore.instance
-                  .collection("tranches")
-                  .doc(tranche_uid)
-                  .collection("vente_a_credits")
-                  .doc(element.id)
-                  .update({"paye": true});
             }
           });
 
@@ -2367,7 +2363,7 @@ class Functions {
               .doc(tranche_uid)
               .collection("clients")
               .doc(client_uid)
-              .update({"total__non_paye": 0});
+              .update({"total_non_paye": 0});
         }
 
         return "200";
@@ -2523,6 +2519,8 @@ class Functions {
           "credit_nom": Credit_nom,
           "numero_retrait": numero
         });
+
+        Navigator.of(context).pop();
 
         Navigator.push(
             context,

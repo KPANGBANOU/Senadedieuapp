@@ -158,12 +158,30 @@ class ListClients extends StatelessWidget {
                             leading: CircleAvatar(
                               backgroundColor: Colors.lightBlue.shade900,
                               child: Text(
-                                _donnes.nom.substring(0, 1).toUpperCase(),
+                                _donnes.nom.substring(0, 2).toUpperCase(),
                                 style: GoogleFonts.alike(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
+                            ),
+                            subtitle: Row(
+                              children: [
+                                Icon(
+                                  Icons.sell,
+                                  color: Colors.black,
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  _donnes.dernier_achat,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: GoogleFonts.alike(
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
                             ),
                             title: Text(
                               _donnes.nom,
@@ -191,12 +209,30 @@ class ListClients extends StatelessWidget {
                                 leading: CircleAvatar(
                                   backgroundColor: Colors.lightBlue.shade900,
                                   child: Text(
-                                    _donnes.nom.substring(0, 1).toUpperCase(),
+                                    _donnes.nom.substring(0, 2).toUpperCase(),
                                     style: GoogleFonts.alike(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
+                                ),
+                                subtitle: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.sell,
+                                      color: Colors.black,
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      _donnes.dernier_achat,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: GoogleFonts.alike(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
                                 ),
                                 title: Text(
                                   _donnes.nom,

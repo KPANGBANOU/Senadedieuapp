@@ -295,7 +295,7 @@ class _ListeDepensesState extends State<ListeDepenses> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.lightBlue.shade900,
+        backgroundColor: Colors.brown.shade900,
         onPressed: () {
           AddDepense(context, widget.tranche_uid, budget_tranche.uid,
               budget_tranche.depense);
@@ -369,6 +369,9 @@ class _ListeDepensesState extends State<ListeDepenses> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextField(
+                    onChanged: (value) {
+                      provider.change_description(value);
+                    },
                     enableSuggestions: true,
                     autocorrect: true,
                     keyboardType: TextInputType.multiline,
@@ -391,6 +394,9 @@ class _ListeDepensesState extends State<ListeDepenses> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextField(
+                    onChanged: (value) {
+                      provider.change_montant(value);
+                    },
                     keyboardType: TextInputType.number,
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     decoration: InputDecoration(

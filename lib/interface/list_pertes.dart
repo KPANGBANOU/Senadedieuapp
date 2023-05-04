@@ -292,7 +292,7 @@ class _ListePerteState extends State<ListePerte> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.lightBlue.shade900,
+        backgroundColor: Colors.brown.shade900,
         onPressed: () {
           AddPerte(context, widget.tranche_uid, budget_tranche.uid,
               budget_tranche.perte);
@@ -366,6 +366,9 @@ class _ListePerteState extends State<ListePerte> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextField(
+                    onChanged: (value) {
+                      provider.change_description(value);
+                    },
                     enableSuggestions: true,
                     autocorrect: true,
                     keyboardType: TextInputType.multiline,
@@ -388,6 +391,9 @@ class _ListePerteState extends State<ListePerte> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextField(
+                    onChanged: (value) {
+                      provider.change_montant(value);
+                    },
                     keyboardType: TextInputType.number,
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     decoration: InputDecoration(

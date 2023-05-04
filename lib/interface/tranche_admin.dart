@@ -4,6 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:senadedieu/interface/drawer_admin.dart';
+import 'package:senadedieu/interface/stream_tranche_list_depot.dart';
+import 'package:senadedieu/interface/stream_tranche_list_depots_marchants.dart';
+import 'package:senadedieu/interface/stream_tranche_list_depots_non_payes.dart';
+import 'package:senadedieu/interface/stream_tranche_list_retraits.dart';
+import 'package:senadedieu/interface/stream_tranche_vente_credit_effectues.dart';
+import 'package:senadedieu/interface/stream_tranche_ventes_a_credits.dart';
+import 'package:senadedieu/interface/stream_tranche_ventes_a_credits_non_payes.dart';
+import 'package:senadedieu/interface/stream_tranche_ventes_a_credits_payes.dart';
 import 'package:senadedieu/models/budget_tranches.dart';
 import 'package:senadedieu/models/tranches.dart';
 
@@ -343,7 +351,15 @@ class TrancheAdmin extends StatelessWidget {
                     padding:
                         const EdgeInsets.only(left: 20, right: 15, bottom: 10),
                     child: TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    StreamTrancheVentesCreditsEffectues(
+                                        tranche_uid: ferme.uid),
+                              ));
+                        },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           // ignore: prefer_const_literals_to_create_immutables
@@ -375,7 +391,15 @@ class TrancheAdmin extends StatelessWidget {
                     padding:
                         const EdgeInsets.only(left: 20, right: 15, bottom: 10),
                     child: TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    StreamTrancheVenteACredits(
+                                        tranche_uid: ferme.uid),
+                              ));
+                        },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           // ignore: prefer_const_literals_to_create_immutables
@@ -407,7 +431,15 @@ class TrancheAdmin extends StatelessWidget {
                     padding:
                         const EdgeInsets.only(left: 20, right: 15, bottom: 10),
                     child: TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    StreamTrancheVenteACreditsNonPayes(
+                                        tranche_uid: ferme.uid),
+                              ));
+                        },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           // ignore: prefer_const_literals_to_create_immutables
@@ -439,7 +471,15 @@ class TrancheAdmin extends StatelessWidget {
                     padding:
                         const EdgeInsets.only(left: 20, right: 15, bottom: 10),
                     child: TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    StreamTrancheVenteACreditsPayes(
+                                        tranche_uid: ferme.uid),
+                              ));
+                        },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           // ignore: prefer_const_literals_to_create_immutables
@@ -471,7 +511,54 @@ class TrancheAdmin extends StatelessWidget {
                     padding:
                         const EdgeInsets.only(left: 20, right: 15, bottom: 10),
                     child: TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => StreamTrancheListRetraits(
+                                    tranche_uid: ferme.uid),
+                              ));
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          // ignore: prefer_const_literals_to_create_immutables
+                          children: [
+                            Expanded(
+                              child: Text(
+                                "Inventaires des retraits",
+                                style: GoogleFonts.alike(
+                                    color: Colors.lightBlue.shade900,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            Icon(
+                              Icons.arrow_right_alt,
+                              color: Colors.black,
+                            )
+                          ],
+                        )),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 25),
+                    child: Container(
+                      height: 1,
+                      width: double.infinity,
+                      color: Colors.black12,
+                    ),
+                  ),
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(left: 20, right: 15, bottom: 10),
+                    child: TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    StreamTrancheListDepotsEffectues(
+                                        tranche_uid: ferme.uid),
+                              ));
+                        },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           // ignore: prefer_const_literals_to_create_immutables
@@ -503,7 +590,15 @@ class TrancheAdmin extends StatelessWidget {
                     padding:
                         const EdgeInsets.only(left: 20, right: 15, bottom: 10),
                     child: TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    StreamTrancheListDepotsMarchants(
+                                        tranche_uid: ferme.uid),
+                              ));
+                        },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           // ignore: prefer_const_literals_to_create_immutables
@@ -535,7 +630,15 @@ class TrancheAdmin extends StatelessWidget {
                     padding:
                         const EdgeInsets.only(left: 20, right: 15, bottom: 10),
                     child: TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    StreamTrancheListDepotsNonPayes(
+                                        tranche_uid: ferme.uid),
+                              ));
+                        },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           // ignore: prefer_const_literals_to_create_immutables

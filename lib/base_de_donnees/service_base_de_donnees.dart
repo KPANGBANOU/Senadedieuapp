@@ -203,7 +203,7 @@ class ServiceDB {
         .collection("tranches")
         .doc(tranche_uid)
         .collection("clients")
-        .orderBy("created_at", descending: true)
+        .orderBy("dernier_achat", descending: true)
         .snapshots()
         .map((event) =>
             event.docs.map((e) => Clients.FromFirestore(e)).toList());
@@ -230,7 +230,7 @@ class ServiceDB {
             (event) => event.docs.map((e) => Depots.FromFirestore(e)).toList());
   }
 
-  Stream<Depots> sdepot(String tranche_uid, String depot_uid) {
+  Stream<Depots> depot(String tranche_uid, String depot_uid) {
     return _ref
         .collection("tranches")
         .doc(tranche_uid)

@@ -173,10 +173,29 @@ class ListCredits extends StatelessWidget {
                                               tranche_uid: tranche_uid,
                                               user_uid: _donnes.user_uid))));
                             },
+                            subtitle: Row(
+                              children: [
+                                Icon(
+                                  Icons.storage,
+                                  color: Colors.black,
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  _donnes.montant_disponible.toString() +
+                                      " XOF",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: GoogleFonts.alike(
+                                      fontWeight: FontWeight.bold),
+                                )
+                              ],
+                            ),
                             leading: CircleAvatar(
                               backgroundColor: Colors.lightBlue.shade900,
                               child: Text(
-                                _donnes.nom.substring(0, 1).toUpperCase(),
+                                _donnes.nom.substring(0, 2).toUpperCase(),
                                 style: GoogleFonts.alike(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
@@ -219,12 +238,31 @@ class ListCredits extends StatelessWidget {
                                 leading: CircleAvatar(
                                   backgroundColor: Colors.lightBlue.shade900,
                                   child: Text(
-                                    _donnes.nom.substring(0, 1).toUpperCase(),
+                                    _donnes.nom.substring(0, 2).toUpperCase(),
                                     style: GoogleFonts.alike(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
+                                ),
+                                subtitle: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.storage,
+                                      color: Colors.black,
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      _donnes.montant_disponible.toString() +
+                                          " XOF",
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: GoogleFonts.alike(
+                                          fontWeight: FontWeight.bold),
+                                    )
+                                  ],
                                 ),
                                 trailing: IconButton(
                                     onPressed: (() {
@@ -281,11 +319,12 @@ Future<void> AddCredit(
 
       bool affiche = provider.affiche;
       return AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: Row(
           children: [
             Expanded(
                 child: Text(
-              "Nouveau crédit".toUpperCase(),
+              "Nouveau réseau",
               style: GoogleFonts.alike(fontWeight: FontWeight.bold),
             )),
             SizedBox(
@@ -315,7 +354,7 @@ Future<void> AddCredit(
                 Padding(
                   padding: const EdgeInsets.only(left: 10, bottom: 10),
                   child: Text(
-                    "Nom du crédit",
+                    "Nom du réseau GSM",
                     style: GoogleFonts.alike(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -377,7 +416,7 @@ Future<void> AddCredit(
                     decoration: InputDecoration(
                         focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(
-                                color: montant_initial < 0
+                                color: montant_initial <= 0
                                     ? Colors.red
                                     : Colors.blue))),
                     keyboardType: TextInputType.number,
@@ -400,7 +439,7 @@ Future<void> AddCredit(
                     decoration: InputDecoration(
                         focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(
-                                color: seuil_approvisionnement < 0
+                                color: seuil_approvisionnement <= 0
                                     ? Colors.red
                                     : Colors.blue))),
                     keyboardType: TextInputType.number,
@@ -412,112 +451,121 @@ Future<void> AddCredit(
         actions: [
           Padding(
             padding: const EdgeInsets.only(left: 10, bottom: 14),
-            child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.lightBlue.shade900),
-                onPressed: () async {
-                  provider.affiche_true();
-                  final String statut_code = await function.AjouterCredit(
-                      tranche_uid,
-                      nomCredit.text,
-                      benefice_sur_5000,
-                      montant_initial,
-                      seuil_approvisionnement,
-                      user_uid);
+            child: SizedBox(
+              width: double.infinity,
+              height: 40,
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.lightBlue.shade900),
+                  onPressed: () async {
+                    provider.affiche_true();
+                    final String statut_code = await function.AjouterCredit(
+                        tranche_uid,
+                        nomCredit.text,
+                        benefice_sur_5000,
+                        montant_initial,
+                        seuil_approvisionnement,
+                        user_uid);
 
-                  if (statut_code == "100") {
-                    _speak("champs vides ou invalides");
-                    provider.affiche_false();
+                    if (statut_code == "100") {
+                      _speak("champs vides ou invalides");
+                      provider.affiche_false();
 
-                    final snakbar = SnackBar(
-                      content: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          "champs vides ou invalides",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
+                      final snakbar = SnackBar(
+                        content: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "champs vides ou invalides",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
-                      ),
-                      backgroundColor: Colors.redAccent.withOpacity(.8),
-                      elevation: 1,
-                      behavior: SnackBarBehavior.floating,
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snakbar);
-                  } else if (statut_code == "202") {
-                    _speak("vérifiez si vous avez activé les données mobiles");
-                    provider.affiche_false();
+                        backgroundColor: Colors.redAccent.withOpacity(.8),
+                        elevation: 1,
+                        behavior: SnackBarBehavior.floating,
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snakbar);
+                    } else if (statut_code == "202") {
+                      _speak(
+                          "vérifiez si vous avez activé les données mobiles");
+                      provider.affiche_false();
 
-                    final snakbar = SnackBar(
-                      content: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          "Une erreur est survenue",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
+                      final snakbar = SnackBar(
+                        content: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "Une erreur est survenue",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
-                      ),
-                      backgroundColor: Colors.redAccent.withOpacity(.8),
-                      elevation: 1,
-                      behavior: SnackBarBehavior.floating,
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snakbar);
-                  } else if (statut_code == "201") {
-                    _speak("Ce crédit existe déjà");
-                    provider.affiche_false();
+                        backgroundColor: Colors.redAccent.withOpacity(.8),
+                        elevation: 1,
+                        behavior: SnackBarBehavior.floating,
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snakbar);
+                    } else if (statut_code == "201") {
+                      _speak("Ce crédit existe déjà");
+                      provider.affiche_false();
 
-                    final snakbar = SnackBar(
-                      content: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          "Ce crédit existe déjà",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
+                      final snakbar = SnackBar(
+                        content: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "Ce crédit existe déjà",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
-                      ),
-                      backgroundColor: Colors.redAccent.withOpacity(.8),
-                      elevation: 1,
-                      behavior: SnackBarBehavior.floating,
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snakbar);
-                  } else {
-                    _speak("le credit a été ajouter avec succès");
-                    provider.affiche_false();
-                    provider.change_benefice("");
-                    provider.change_seuil_approvisionnement("");
-                    provider.change_montant_initial("");
-                    final snakbar = SnackBar(
-                      content: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          "Ce crédit a été ajouté avec succès",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
+                        backgroundColor: Colors.redAccent.withOpacity(.8),
+                        elevation: 1,
+                        behavior: SnackBarBehavior.floating,
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snakbar);
+                    } else {
+                      _speak("le credit a été ajouté avec succès");
+                      provider.affiche_false();
+                      provider.change_benefice("");
+                      provider.change_seuil_approvisionnement("");
+                      provider.change_montant_initial("");
+                      final snakbar = SnackBar(
+                        content: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "Ce crédit a été ajouté avec succès",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
-                      ),
-                      backgroundColor: Colors.black87,
-                      elevation: 1,
-                      behavior: SnackBarBehavior.floating,
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snakbar);
-                    Navigator.of(dialogcontext).pop();
-                  }
-                },
-                child: affiche
-                    ? CircularProgressIndicator(
-                        color: Colors.white,
-                      )
-                    : Text(
-                        "Ajouter crédit".toUpperCase(),
-                        textAlign: TextAlign.center,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.alike(
-                            fontWeight: FontWeight.bold, color: Colors.white),
-                      )),
+                        backgroundColor: Colors.black87,
+                        elevation: 1,
+                        behavior: SnackBarBehavior.floating,
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snakbar);
+                      Navigator.of(dialogcontext).pop();
+                    }
+                  },
+                  child: affiche
+                      ? CircularProgressIndicator(
+                          color: Colors.white,
+                        )
+                      : Text(
+                          "Ajouter le réseau".toUpperCase(),
+                          textAlign: TextAlign.center,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.alike(
+                              fontWeight: FontWeight.bold, color: Colors.white),
+                        )),
+            ),
           )
         ],
       );
