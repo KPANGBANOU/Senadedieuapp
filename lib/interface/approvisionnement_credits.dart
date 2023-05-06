@@ -125,7 +125,7 @@ class ApprovisionnerListCredits extends StatelessWidget {
                 width: double.infinity,
                 decoration: BoxDecoration(
                     image: DecorationImage(
-                        image: AssetImage("images/communication2.jpg"),
+                        image: AssetImage("images/img.jpg"),
                         fit: BoxFit.cover)),
               ),
               SizedBox(

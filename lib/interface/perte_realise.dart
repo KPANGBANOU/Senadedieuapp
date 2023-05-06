@@ -508,7 +508,7 @@ class PerteRealise extends StatelessWidget {
                           ScaffoldMessenger.of(dialogContext)
                               .showSnackBar(snakbar);
                         } else {
-                          _speak("Mise è jour éffectué avec succès");
+                          _speak(" éffectué avec succès");
                           provider.affiche_false();
                           final snakbar = SnackBar(
                             content: Padding(

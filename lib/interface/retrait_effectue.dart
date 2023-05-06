@@ -781,6 +781,7 @@ class RetraitEffectue extends StatelessWidget {
                           ? 0
                           : int.parse(beneficeRetrait.text);
                       final String statut_code = await function.updateRetrait(
+                          retrait_uid,
                           tranche_uid,
                           client_uid,
                           client_total_retrait,

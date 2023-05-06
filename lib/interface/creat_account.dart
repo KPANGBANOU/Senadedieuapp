@@ -111,9 +111,9 @@ class SignUp extends StatelessWidget {
               decoration: BoxDecoration(
                   image: DecorationImage(
                       image: AssetImage(
-                        "images/login2.jpg",
+                        "images/article2.jpg",
                       ),
-                      fit: BoxFit.fill)),
+                      fit: BoxFit.cover)),
             ),
             SizedBox(
               height: 40,

@@ -140,10 +140,10 @@ class UpdateCredit extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 15, left: 15),
-                child: TextFormField(
-                  onChanged: (value) {
+                child: TextField(
+                  /*  onChanged: (value) {
                     provider.change_nom(value, nomCredit);
-                  },
+                  },*/
                   controller: nomCredit,
                   decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
@@ -183,11 +183,11 @@ class UpdateCredit extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 15.0, left: 15),
-                child: TextFormField(
+                child: TextField(
                   controller: montantDisponible,
-                  onChanged: (value) {
+                  /* onChanged: (value) {
                     provider.change_montant_initial(value);
-                  },
+                  },*/
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
@@ -226,10 +226,10 @@ class UpdateCredit extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 15.0, left: 15),
-                child: TextFormField(
-                  onChanged: (value) {
+                child: TextField(
+                  /*  onChanged: (value) {
                     provider.change_seuil_approvisionnement(value);
-                  },
+                  },*/
                   controller: seuilAprovisionnement,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   keyboardType: TextInputType.number,
@@ -269,11 +269,11 @@ class UpdateCredit extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 15.0, left: 15),
-                child: TextFormField(
+                child: TextField(
                   controller: benefice,
-                  onChanged: (value) {
+                  /* onChanged: (value) {
                     provider.change_benefice(value);
-                  },
+                  },*/
                   maxLength: 3,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   keyboardType: TextInputType.number,
@@ -321,7 +321,7 @@ class UpdateCredit extends StatelessWidget {
                             tranche_uid,
                             credit.uid,
                             credit.nom,
-                            nomCredit.text,
+                            nomCredit.text.toUpperCase(),
                             _benefice_sur_5000,
                             credit.montant_initial,
                             credit.montant_initial_cumule,

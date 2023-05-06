@@ -159,7 +159,7 @@ class ServiceDB {
     return _ref
         .collection("tranches")
         .doc(tranche_uid)
-        .collection("_a_credits")
+        .collection("vente_a_credits")
         .orderBy("created_at", descending: true)
         .snapshots()
         .map((event) =>

@@ -1,6 +1,9 @@
-// ignore_for_file: non_constant_identifier_names, prefer_const_constructors, prefer_interpolation_to_compose_strings
+// ignore_for_file: non_constant_identifier_names, prefer_const_constructors, prefer_interpolation_to_compose_strings, no_leading_underscores_for_local_identifiers, use_build_context_synchronously
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:senadedieu/interface/accueil_admin.dart';
@@ -265,16 +268,129 @@ class DrawerAdmin extends StatelessWidget {
               },
             ),
             ListTile(
+              leading: Icon(Icons.logout),
               title: Text("Déconnexion",
                   style: GoogleFonts.alike(
                     fontWeight: FontWeight.bold,
                     color: Colors.redAccent,
                   )),
-              onTap: () {},
+              onTap: () {
+                LogOut(context, user.uid);
+              },
             ),
           ],
         ),
       ),
     );
+  }
+
+  Future<void> LogOut(BuildContext context, String user_uid) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          title: Text(
+            "Etes vous sur ?".toUpperCase(),
+            style: GoogleFonts.alike(
+                fontWeight: FontWeight.bold, color: Colors.black),
+          ),
+          content: SingleChildScrollView(
+            child: ListBody(
+              // ignore: prefer_const_literals_to_create_immutables
+              children: <Widget>[
+                Text(
+                  "Voudriez-vous vous déconnecter ?",
+                  style: GoogleFonts.alike(fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  SizedBox(
+                    height: 40,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.lightBlue.shade900,
+                          textStyle: TextStyle()),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'Confirmer'.toUpperCase(),
+                          style: GoogleFonts.alike(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      onPressed: () async {
+                        try {
+                          await FirebaseFirestore.instance
+                              .collection("users")
+                              .doc(user_uid)
+                              .update({"login": false});
+                          await FirebaseAuth.instance.signOut();
+                          _speak("Vous avez été déconnecté");
+                          Navigator.pushReplacement(
+                              dialogContext,
+                              MaterialPageRoute(
+                                  builder: ((context) => Login())));
+
+                          // ignore: empty_catches
+                        } catch (e) {
+                          _speak("Une erreur inattendue s'est produite");
+                        }
+                      },
+                    ),
+                  ),
+                  SizedBox(
+                    height: 40,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.redAccent.withOpacity(.7),
+                          textStyle: TextStyle()),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'Annuler'.toUpperCase(),
+                          style: GoogleFonts.alike(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.of(dialogContext).pop();
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 40,
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future _speak(String text) async {
+    final FlutterTts _flutter_tts = FlutterTts();
+    _flutter_tts.setLanguage("Fr");
+    _flutter_tts.setSpeechRate(0.5);
+    _flutter_tts.setVolume(0.5);
+    _flutter_tts.setPitch(1.0);
+    _flutter_tts.speak(text);
   }
 }

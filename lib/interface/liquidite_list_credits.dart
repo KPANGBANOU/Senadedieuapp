@@ -171,7 +171,7 @@ class LiquiditeListCredits extends StatelessWidget {
                             leading: CircleAvatar(
                               backgroundColor: Colors.lightBlue.shade900,
                               child: Text(
-                                _donnes.nom.substring(0, 1).toUpperCase(),
+                                _donnes.nom.substring(0, 2).toUpperCase(),
                                 style: GoogleFonts.alike(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
@@ -187,14 +187,24 @@ class LiquiditeListCredits extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            subtitle: Text(
-                              "Stock physique " +
+                            subtitle: Row(
+                              children: [
+                                Icon(
+                                  Icons.storage,
+                                  color: Colors.black,
+                                ),
+                                SizedBox(
+                                  width: 14,
+                                ),
+                                Text(
                                   _donnes.montant_disponible.toString() +
-                                  " F",
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: GoogleFonts.alike(
-                                  fontWeight: FontWeight.bold),
+                                      " XOF",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: GoogleFonts.alike(
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
                             ),
                           )
                         : _donnes.nom
@@ -215,7 +225,7 @@ class LiquiditeListCredits extends StatelessWidget {
                                 leading: CircleAvatar(
                                   backgroundColor: Colors.lightBlue.shade900,
                                   child: Text(
-                                    _donnes.nom.substring(0, 1).toUpperCase(),
+                                    _donnes.nom.substring(0, 2).toUpperCase(),
                                     style: GoogleFonts.alike(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
@@ -231,14 +241,24 @@ class LiquiditeListCredits extends StatelessWidget {
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                subtitle: Text(
-                                  "Stock physique " +
+                                subtitle: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.storage,
+                                      color: Colors.black,
+                                    ),
+                                    SizedBox(
+                                      width: 14,
+                                    ),
+                                    Text(
                                       _donnes.montant_disponible.toString() +
-                                      " F",
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: GoogleFonts.alike(
-                                      fontWeight: FontWeight.bold),
+                                          " XOF",
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: GoogleFonts.alike(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
                                 ),
                               )
                             : Container();

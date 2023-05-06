@@ -94,7 +94,7 @@ class Login extends StatelessWidget {
               decoration: BoxDecoration(
                   image: DecorationImage(
                       image: AssetImage(
-                        "images/login.jpg",
+                        "images/img.jpg",
                       ),
                       fit: BoxFit.fill)),
             ),

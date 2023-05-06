@@ -331,7 +331,6 @@ class ListVente extends StatelessWidget {
               children: [
                 SizedBox(
                   height: 40,
-                  width: MediaQuery.of(context).size.width * 0.42,
                   child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.lightBlue.shade900),
@@ -427,7 +426,6 @@ class ListVente extends StatelessWidget {
                 ),
                 SizedBox(
                   height: 40,
-                  width: MediaQuery.of(context).size.width * 0.42,
                   child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.redAccent),

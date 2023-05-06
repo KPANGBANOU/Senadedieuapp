@@ -92,7 +92,7 @@ class TrancheInformation extends StatelessWidget {
               decoration: BoxDecoration(
                   image: DecorationImage(
                       image: AssetImage(
-                        "images/communication2.jpg",
+                        "images/img.jpg",
                       ),
                       fit: BoxFit.cover)),
             ),

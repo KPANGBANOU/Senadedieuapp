@@ -375,7 +375,7 @@ class VenteEffectue extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Dernier transaction du client :",
+                            "Dernière transaction du client :",
                             style: GoogleFonts.alike(
                                 color: Colors.lightBlue.shade800,
                                 fontWeight: FontWeight.bold),
@@ -613,6 +613,7 @@ class VenteEffectue extends StatelessWidget {
     TextEditingController numeroVente = TextEditingController();
     numeroClient.text = client_numero;
     numeroVente.text = vente_numero;
+    int _montant = 0;
     return showDialog<void>(
       barrierDismissible: false,
       context: context,
@@ -625,7 +626,7 @@ class VenteEffectue extends StatelessWidget {
         String numero_client = provider.numero_client;
         String numero = provider.numero;
         int montant = provider.montant;
-        int _montant = 0;
+
         bool affiche = provider.affiche;
         bool perte = provider.perte;
         bool payer = provider.payer;
@@ -879,7 +880,7 @@ class VenteEffectue extends StatelessWidget {
                               tranche_uid,
                               vente_uid,
                               client_numero,
-                              numero,
+                              vente_numero,
                               nomClient.text,
                               numeroClient.text,
                               numeroVente.text,
@@ -903,10 +904,10 @@ class VenteEffectue extends StatelessWidget {
                               vente_montant,
                               client_total_paye,
                               client_total_non_paye,
-                              montant,
+                              _montant,
                               perte,
                               payer,
-                              description);
+                              descriptionPerte.text);
 
                       if (statut_code == "202") {
                         _speak(

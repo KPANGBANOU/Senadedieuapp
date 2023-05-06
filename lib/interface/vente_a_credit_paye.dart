@@ -90,7 +90,7 @@ class VenteACreditEffectuePaye extends StatelessWidget {
                 decoration: BoxDecoration(
                     image: DecorationImage(
                         image: AssetImage(
-                          "images/article2.jpg",
+                          "images/img.jpg",
                         ),
                         fit: BoxFit.cover)),
               ),

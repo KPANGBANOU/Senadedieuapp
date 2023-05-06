@@ -157,7 +157,7 @@ class FactureDepot extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Réseau",
+                            "Réseau GSM",
                             style: GoogleFonts.alike(
                                 color: Colors.lightBlue.shade800,
                                 fontWeight: FontWeight.bold),

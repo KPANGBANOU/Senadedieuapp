@@ -1441,7 +1441,7 @@ class Functions {
             .collection("tranches")
             .doc(tranche_uid)
             .collection("budget")
-            .doc(tranche_uid)
+            .doc(budget_tranche_uid)
             .update({
           "perte": budget_tranche_perte + montant,
         });
@@ -1491,7 +1491,7 @@ class Functions {
             .collection("tranches")
             .doc(tranche_uid)
             .collection("budget")
-            .doc(tranche_uid)
+            .doc(budget_tranche_uid)
             .update({
           "depense": budget_tranche_depense + montant,
         });
@@ -1499,7 +1499,7 @@ class Functions {
         await FirebaseFirestore.instance
             .collection("budget")
             .doc(budget_uid)
-            .update({'perte': budget_depense + montant});
+            .update({'depense': budget_depense + montant});
 
         return "200";
       }
@@ -1522,7 +1522,7 @@ class Functions {
       if (transe_uid.isEmpty ||
           depense_uid.isEmpty ||
           depense_montant <= 0 ||
-          montant < 0 ||
+          montant <= 0 ||
           description.isEmpty ||
           budget_uid.isEmpty ||
           budget_tranche_uid.isEmpty) {
@@ -1583,7 +1583,7 @@ class Functions {
       if (transe_uid.isEmpty ||
           perte_uid.isEmpty ||
           perte_montant <= 0 ||
-          montant < 0 ||
+          montant <= 0 ||
           description.isEmpty ||
           budget_uid.isEmpty ||
           budget_tranche_uid.isEmpty) {
@@ -1641,9 +1641,7 @@ class Functions {
       int budget_tranche_perte) async {
     try {
       if (tranche_uid.isEmpty ||
-          perte_uid.isEmpty ||
-          perte_montant <= 0 ||
-          budget_uid.isEmpty ||
+          perte_uid.isEmpty | budget_uid.isEmpty ||
           budget_tranche_uid.isEmpty) {
         return "100";
       } else {
@@ -1705,7 +1703,6 @@ class Functions {
     try {
       if (tranche_uid.isEmpty ||
           depense_uid.isEmpty ||
-          depense_montant <= 0 ||
           budget_uid.isEmpty ||
           budget_tranche_uid.isEmpty) {
         return "100";
@@ -2546,6 +2543,7 @@ class Functions {
   }
 
   Future<String> updateRetrait(
+      String retrait_uid,
       String tranche_uid,
       String client_uid,
       int client_total_retrait,
@@ -2634,6 +2632,13 @@ class Functions {
                 ? budget_benefice - difference_benefice
                 : budget_benefice + difference_benefice
           });
+
+          await FirebaseFirestore.instance
+              .collection("tranches")
+              .doc(tranche_uid)
+              .collection("retraits")
+              .doc(retrait_uid)
+              .update({"montant": montant, "benefice": benefice});
 
           return "200";
         }

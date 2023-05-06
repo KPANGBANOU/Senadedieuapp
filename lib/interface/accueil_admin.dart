@@ -141,7 +141,7 @@ class AccueilAdmin extends StatelessWidget {
                             provider.change_current_index(3);
                           },
                           child: Text(
-                            "All sklices ",
+                            "All slices ",
                             style: GoogleFonts.alike(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white),

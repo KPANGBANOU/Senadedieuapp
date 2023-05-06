@@ -425,7 +425,7 @@ class VentesCredits extends StatelessWidget {
                     : Column(
                         children: [
                           Text(
-                            "S'agit il d'une vente à crédit ?",
+                            "S'agit il d'une vente payée ?",
                             style:
                                 GoogleFonts.alike(fontWeight: FontWeight.bold),
                           ),

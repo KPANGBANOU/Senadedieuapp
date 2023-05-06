@@ -81,19 +81,19 @@ class Accueil extends StatelessWidget {
                 height: MediaQuery.of(context).size.height * 0.4,
                 decoration: BoxDecoration(
                     image: DecorationImage(
-                        image: AssetImage("images/communication1.jpg"),
+                        image: AssetImage("images/img.jpg"),
                         fit: BoxFit.cover)),
               ),
               SizedBox(
                 height: 15,
               ),
               Text(
-                "Soyez les bienvenus",
+                "Soyez les bienvenus".toUpperCase(),
                 textAlign: TextAlign.center,
                 style: GoogleFonts.alike(
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
-                    fontSize: 19),
+                    fontSize: 17),
               ),
               SizedBox(
                 height: 40,
