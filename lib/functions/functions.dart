@@ -304,9 +304,9 @@ class Functions {
                   .update({
                 "seuil_approvisionnement": seuil_approvisionnement,
                 "benefice_sur_5000": benefice_sur_5000,
-                "montant_initial": montant_initial + difference,
-                "montant_initial_cumule": montant_initial_cumule + difference,
-                "montant_disponible": credit_montant_disponible + difference
+                "montant_initial": montant_initial - difference,
+                "montant_initial_cumule": montant_initial_cumule - difference,
+                "montant_disponible": credit_montant_disponible - difference
               });
               return "200";
             }
@@ -365,9 +365,9 @@ class Functions {
                   "nom": nom,
                   "seuil_approvisionnement": seuil_approvisionnement,
                   "benefice_sur_5000": benefice_sur_5000,
-                  "montant_initial": montant_initial + difference,
-                  "montant_initial_cumule": montant_initial_cumule + difference,
-                  "montant_disponible": credit_montant_disponible + difference
+                  "montant_initial": montant_initial - difference,
+                  "montant_initial_cumule": montant_initial_cumule - difference,
+                  "montant_disponible": credit_montant_disponible - difference
                 });
                 return "200";
               }
@@ -940,7 +940,7 @@ class Functions {
         double differnce_benefice = vente_benefice - benefice;
 
         if (difference_montant < 0 &&
-            credit_montant_disponible < difference_montant) {
+            credit_montant_disponible < -1 * difference_montant) {
           return "101";
         } else {
           if (perte) {
@@ -964,15 +964,10 @@ class Functions {
                   .collection("credits")
                   .doc(credit_uid)
                   .update({
-                "montant_disponible": difference_montant > 0
-                    ? credit_montant_disponible - difference_montant
-                    : credit_montant_disponible + difference_montant,
-                "benefice": differnce_benefice > 0
-                    ? credit_benefice - differnce_benefice
-                    : credit_benefice + differnce_benefice,
-                "benefice_cumule": differnce_benefice > 0
-                    ? credit_benefice_cumule - differnce_benefice
-                    : credit_benefice_cumule + differnce_benefice
+                "montant_disponible":
+                    credit_montant_disponible - difference_montant,
+                "benefice": credit_benefice - differnce_benefice,
+                "benefice_cumule": credit_benefice_cumule - differnce_benefice
               });
 
               await FirebaseFirestore.instance
@@ -1301,9 +1296,7 @@ class Functions {
                       .doc(nouveau_client_uid)
                       .update({
                     "derniere_achat": DateTime.now(),
-                    "total_achat": difference_montant <= 0
-                        ? nouveau_total_achat + difference_montant
-                        : nouveau_total_achat - difference_montant,
+                    "total_achat": nouveau_total_achat - difference_montant,
                   });
                 }
 
@@ -1322,9 +1315,7 @@ class Functions {
                     .collection("clients")
                     .doc(client_uid)
                     .update({
-                  "total_achat": difference_montant > 0
-                      ? client_total_paye - difference_montant
-                      : client_total_paye + difference_montant,
+                  "total_achat": client_total_paye - difference_montant,
                 });
               }
 
@@ -1341,12 +1332,8 @@ class Functions {
                 "client_uid": client_numero != client_numero_saisie
                     ? nouveau_client_uid
                     : client_uid,
-                "montant": difference_montant > 0
-                    ? vente_montant - difference_montant
-                    : vente_montant + difference_montant,
-                "benefice": differnce_benefice > 0
-                    ? vente_benefice - differnce_benefice
-                    : vente_benefice + differnce_benefice,
+                "montant": vente_montant - difference_montant,
+                "benefice": vente_benefice - differnce_benefice,
               });
 
               // mise à jour de stock
@@ -1357,15 +1344,10 @@ class Functions {
                   .collection("credits")
                   .doc(credit_uid)
                   .update({
-                "montant_disponible": difference_montant > 0
-                    ? credit_montant_disponible - difference_montant
-                    : credit_montant_disponible + difference_montant,
-                "benefice": differnce_benefice > 0
-                    ? credit_benefice - differnce_benefice
-                    : credit_benefice + differnce_benefice,
-                "benefice_cumule": differnce_benefice > 0
-                    ? credit_benefice_cumule - differnce_benefice
-                    : credit_benefice_cumule + differnce_benefice
+                "montant_disponible":
+                    credit_montant_disponible - difference_montant,
+                "benefice": credit_benefice - differnce_benefice,
+                "benefice_cumule": credit_benefice_cumule - differnce_benefice
               });
 
               // ajout au budget general
@@ -1373,12 +1355,8 @@ class Functions {
                   .collection("budget")
                   .doc(budget_uid)
                   .update({
-                "solde_total": difference_montant <= 0
-                    ? budget_solde_total + difference_montant
-                    : budget_solde_total - difference_montant,
-                "benefice": differnce_benefice > 0
-                    ? budget_benefice - differnce_benefice
-                    : budget_benefice + differnce_benefice
+                "solde_total": budget_solde_total - difference_montant,
+                "benefice": budget_benefice - differnce_benefice
               });
               // ajoutv au budget du tranche
 
@@ -1388,12 +1366,8 @@ class Functions {
                   .collection("budget")
                   .doc(budget_tranche_uid)
                   .update({
-                "solde_total": difference_montant > 0
-                    ? budget_tranche_solde_total - difference_montant
-                    : budget_tranche_solde_total + difference_montant,
-                "benefice": differnce_benefice > 0
-                    ? budget_tranche_benefice - differnce_benefice
-                    : budget_tranche_benefice + differnce_benefice
+                "solde_total": budget_tranche_solde_total - difference_montant,
+                "benefice": budget_tranche_benefice - differnce_benefice
               });
 
               return "200";
@@ -1537,9 +1511,7 @@ class Functions {
             .doc(depense_uid)
             .update({
           "description": description,
-          "montant": differnce > 0
-              ? depense_montant - differnce
-              : depense_montant + differnce
+          "montant": depense_montant - differnce
         });
 
         await FirebaseFirestore.instance
@@ -1547,20 +1519,12 @@ class Functions {
             .doc(transe_uid)
             .collection("budget")
             .doc(budget_tranche_uid)
-            .update({
-          "depense": differnce > 0
-              ? budget_tranche_depense - differnce
-              : budget_tranche_depense + differnce
-        });
+            .update({"depense": budget_tranche_depense - differnce});
 
         await FirebaseFirestore.instance
             .collection("budget")
             .doc(budget_uid)
-            .update({
-          "depense": differnce > 0
-              ? budget_depense - differnce
-              : budget_depense + differnce
-        });
+            .update({"depense": budget_depense - differnce});
 
         return "200";
       }
@@ -1598,9 +1562,7 @@ class Functions {
             .doc(perte_uid)
             .update({
           "description": description,
-          "montant": differnce > 0
-              ? perte_montant - differnce
-              : perte_montant + differnce
+          "montant": perte_montant - differnce
         });
 
         await FirebaseFirestore.instance
@@ -1608,20 +1570,12 @@ class Functions {
             .doc(transe_uid)
             .collection("budget")
             .doc(budget_tranche_uid)
-            .update({
-          "perte": differnce > 0
-              ? budget_tranche_perte - differnce
-              : budget_tranche_perte + differnce
-        });
+            .update({"perte": budget_tranche_perte - differnce});
 
         await FirebaseFirestore.instance
             .collection("budget")
             .doc(budget_uid)
-            .update({
-          "perte": differnce > 0
-              ? budget_perte - differnce
-              : budget_perte + differnce
-        });
+            .update({"perte": budget_perte - differnce});
 
         return "200";
       }
@@ -2585,21 +2539,13 @@ class Functions {
               .collection("credits")
               .doc(credit_uid)
               .update({
-            "montant_disponible": difference_montant > 0
-                ? credit_montant_disponible - difference_montant
-                : credit_montant_disponible + difference_montant,
-            "montant_initial": difference_montant > 0
-                ? credit_montant_initial - difference_montant
-                : credit_montant_initial + difference_montant,
-            "montant_initial_cumule": difference_montant > 0
-                ? credit_montant_initial_cumule - difference_montant
-                : credit_montant_initial_cumule + difference_montant,
-            "benefice": difference_benefice > 0
-                ? credit_benefice - difference_benefice
-                : credit_benefice + difference_benefice,
-            "benefice_cumule": difference_benefice > 0
-                ? credit_benefice - difference_benefice
-                : credit_benefice + difference_benefice
+            "montant_disponible":
+                credit_montant_disponible - difference_montant,
+            "montant_initial": credit_montant_initial - difference_montant,
+            "montant_initial_cumule":
+                credit_montant_initial_cumule - difference_montant,
+            "benefice": credit_benefice - difference_benefice,
+            "benefice_cumule": credit_benefice - difference_benefice
           });
 
           await FirebaseFirestore.instance
@@ -2607,31 +2553,21 @@ class Functions {
               .doc(tranche_uid)
               .collection("clients")
               .doc(client_uid)
-              .update({
-            "total_retrait": difference_montant > 0
-                ? client_total_retrait - difference_montant
-                : client_total_retrait + difference_montant
-          });
+              .update(
+                  {"total_retrait": client_total_retrait - difference_montant});
 
           await FirebaseFirestore.instance
               .collection("tranches")
               .doc(tranche_uid)
               .collection("budget")
               .doc(budget_tranche_uid)
-              .update({
-            "benefice": difference_benefice > 0
-                ? budget_tranche_benefice - difference_benefice
-                : budget_tranche_benefice + difference_benefice
-          });
+              .update(
+                  {"benefice": budget_tranche_benefice - difference_benefice});
 
           await FirebaseFirestore.instance
               .collection("budget")
               .doc(budget_uid)
-              .update({
-            "benefice": difference_benefice > 0
-                ? budget_benefice - difference_benefice
-                : budget_benefice + difference_benefice
-          });
+              .update({"benefice": budget_benefice - difference_benefice});
 
           await FirebaseFirestore.instance
               .collection("tranches")
