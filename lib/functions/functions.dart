@@ -1428,7 +1428,7 @@ class Functions {
         return "200";
       }
     } catch (e) {
-      return "200";
+      return "202";
     }
   }
 
@@ -1478,7 +1478,7 @@ class Functions {
         return "200";
       }
     } catch (e) {
-      return "200";
+      return "202";
     }
   }
 
