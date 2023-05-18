@@ -1,4 +1,4 @@
-package sena.dedieu.senadedie
+package sena.dedieu.senadedieu1
 
 import io.flutter.embedding.android.FlutterActivity
 

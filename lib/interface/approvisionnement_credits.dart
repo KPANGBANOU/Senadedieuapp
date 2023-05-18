@@ -337,12 +337,17 @@ class ApprovisionnerListCredits extends StatelessWidget {
                             Navigator.of(dialogcontext).pop();
                           }
                         },
-                        child: Text(
-                          "Réchargement".toUpperCase(),
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.alike(
-                              fontWeight: FontWeight.bold, color: Colors.white),
-                        )),
+                        child: affiche
+                            ? CircularProgressIndicator(
+                                color: Colors.white,
+                              )
+                            : Text(
+                                "Réchargement".toUpperCase(),
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.alike(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white),
+                              )),
                   ),
                 )
               ],

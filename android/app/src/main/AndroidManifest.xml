@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="sena.dedieu.senadedie">
+    package="sena.dedieu.senadedieu1">
     <application
         android:label="SENA DE DIEU"
         android:name="${applicationName}"
